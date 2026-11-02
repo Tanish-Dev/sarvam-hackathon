@@ -102,15 +102,15 @@ export default function Ask() {
             <p className="flex items-center gap-2 text-[1.1rem] text-white/80"><Loader2 className="size-5 animate-spin" /> {t.thinking}</p>
           ) : answer ? (
             <>
-              <motion.p key={answer} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-sm text-balance text-[1.45rem] font-light leading-snug">{answer}</motion.p>
+              <motion.p key={answer} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-sm text-balance text-[1.3rem] font-light leading-snug">{answer}</motion.p>
               <div className="mt-5"><ListenButton id="answer" text={answer} dark /></div>
               {doctor && <Label className="mt-4 text-white/45">{doctor}</Label>}
             </>
           ) : phase === "rec" ? (
-            <p className="text-[1.6rem] font-light">{t.listening}</p>
+            <p className="text-[1.4rem] font-light">{t.listening}</p>
           ) : (
             <>
-              <h1 className="text-[1.7rem] font-light tracking-tight">{t.askTitle}</h1>
+              <h1 className="text-[1.5rem] font-light tracking-tight">{t.askTitle}</h1>
               <p className="mt-2 text-white/65">{t.askHint}</p>
             </>
           )}

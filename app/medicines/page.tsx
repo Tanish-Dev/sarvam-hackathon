@@ -22,7 +22,7 @@ export default function Medicines() {
       <div className="px-4">
         <div className="dusk-gradient mt-2 rounded-[28px] p-6">
           <Label className="text-white/75">{fill(t.medicinesCount, { n: plan.medicines.length })}</Label>
-          <h1 className="mt-2 text-[1.8rem] font-light tracking-tight">{t.medicinesTitle}</h1>
+          <h1 className="mt-2 text-[1.5rem] font-light tracking-tight">{t.medicinesTitle}</h1>
           <p className="mt-2 text-[0.9rem] text-white/85">{plan.diagnosis_simple}</p>
         </div>
 

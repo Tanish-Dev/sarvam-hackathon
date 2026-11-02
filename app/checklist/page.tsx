@@ -37,7 +37,7 @@ export default function Checklist() {
         <TopBar />
         <div className="px-5">
           <Label className="text-white/55">{t.adherence}</Label>
-          <h1 className="mt-1 text-[1.7rem] font-light tracking-tight">{t.checklistTitle}</h1>
+          <h1 className="mt-1 text-[1.5rem] font-light tracking-tight">{t.checklistTitle}</h1>
           {/* Thin bar chart */}
           <div className="mt-6 flex h-36 items-end justify-between gap-2" role="img" aria-label={t.adherence}>
             {Array.from({ length: 7 }, (_, i) => {

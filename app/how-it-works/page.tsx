@@ -17,7 +17,7 @@ export default function How() {
     <Shell className="bg-paper">
       <TopBar dark={false} back="/" />
       <div className="space-y-4 px-4 pb-16">
-        <h1 className="px-1 pt-2 text-[1.7rem] font-light tracking-tight">{t.howTitle}</h1>
+        <h1 className="px-1 pt-2 text-[1.5rem] font-light tracking-tight">{t.howTitle}</h1>
         <Card dark>
           <ol className="relative space-y-5">
             <span className="absolute bottom-4 left-[21px] top-4 w-px bg-white/15" aria-hidden />

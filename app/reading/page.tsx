@@ -75,7 +75,7 @@ export default function Reading() {
       <div className="relative flex min-h-dvh flex-col justify-center px-6">
         {!error ? (
           <>
-            <h1 className="text-center text-[1.8rem] font-light tracking-tight">{t.readingTitle}</h1>
+            <h1 className="text-center text-[1.5rem] font-light tracking-tight">{t.readingTitle}</h1>
             <ol className="mx-auto mt-10 w-full max-w-sm space-y-4" aria-live="polite">
               {steps.map((s, i) => {
                 const done = step > i;

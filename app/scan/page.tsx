@@ -54,7 +54,7 @@ export default function Scan() {
         <LanguagePill />
       </header>
       <div className="px-5 pb-40">
-        <h1 className="mt-4 text-[1.6rem] font-light leading-tight tracking-tight">{t.scanTitle}</h1>
+        <h1 className="mt-4 text-[1.5rem] font-light leading-tight tracking-tight">{t.scanTitle}</h1>
         <div className="mt-4 flex items-start gap-3 rounded-[22px] bg-white p-4 text-[0.9rem] text-ink/75 shadow-sm">
           <Sparkles className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /> {t.scanTip}
         </div>

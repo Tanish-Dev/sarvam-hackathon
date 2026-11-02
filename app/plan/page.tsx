@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AlertTriangle, BookOpen, CalendarPlus, ChevronRight, Footprints, HelpCircle, Phone, Printer, Salad, Share2, Trash2 } from "lucide-react";
 import { useRequirePlan } from "@/components/useRequirePlan";
-import { Card, Disclaimer, Label, LanguagePill, ListenButton, MicFab, Shell, TickBox, TopBar } from "@/components/ui";
+import { Card, Disclaimer, Label, ListenButton, MicFab, Shell, TickBox, TopBar } from "@/components/ui";
 import { speak, unlockAudio } from "@/lib/audio";
 import { fill } from "@/lib/i18n";
 import { buildIcs, downloadIcs } from "@/lib/ics";
@@ -61,10 +61,10 @@ export default function PlanPage() {
         <div className="hero-gradient relative overflow-hidden rounded-b-[36px] text-white">
           <div className="pointer-events-none absolute -top-10 left-1/2 size-[420px] -translate-x-1/2 rounded-full bg-teal/40 blur-3xl drift" aria-hidden />
           <TopBar />
-          <div className="relative flex min-h-[68dvh] flex-col items-center justify-center px-7 pb-14 text-center">
+          <div className="relative flex min-h-[46dvh] pt-6 flex-col items-center justify-center px-7 pb-14 text-center">
             {isSample && <Label className="mb-4 rounded-full bg-white/10 px-3 py-1 text-white/70 ring-1 ring-white/15">{t.sampleBadge}</Label>}
             <motion.p key={greeting} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-              className="text-balance text-[1.75rem] font-light leading-snug tracking-tight">
+              className="text-balance text-[1.6rem] font-light leading-snug tracking-tight">
               {greeting}
             </motion.p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
@@ -73,7 +73,7 @@ export default function PlanPage() {
             </div>
             {needTap && !muted && <p className="mt-4 text-[0.8rem] text-white/60">{t.tapToHear}</p>}
           </div>
-          <div className="absolute bottom-4 right-4"><LanguagePill dark /></div>
+          
         </div>
 
         <div className="space-y-4 px-4 pt-5">
@@ -118,7 +118,7 @@ export default function PlanPage() {
                 <div>
                   {fDays !== null && fDays >= 0 ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-[3.4rem] font-extralight leading-none">{fDays}</span>
+                      <span className="text-[3rem] font-extralight leading-none">{fDays}</span>
                       <span className="text-[0.95rem] text-white/85">{fDays === 0 ? t.isToday : fill(t.inDays, { n: fDays }).replace(String(fDays), "").trim()}</span>
                     </div>
                   ) : <div className="text-[1.2rem]">{follow.relative_text}</div>}

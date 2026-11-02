@@ -2,7 +2,7 @@
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { AlertTriangle, ArrowLeft, Check, CheckSquare, Home, Info, Languages, Loader2, Pill, Square, Volume2, VolumeX } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Camera, Check, CheckSquare, Home, Info, Languages, Loader2, Pill, Square, Type, Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 import { audioStore, speak, stopAudio, unlockAudio } from "@/lib/audio";
 import { LANGS, type LangCode } from "@/lib/langs";
@@ -19,7 +19,7 @@ export function ListenButton({ id, text, label, dark, big }: { id: string; text:
       type="button"
       aria-label={active ? t.stop : `${t.listen}${label ? `: ${label}` : ""}`}
       onClick={(e) => { e.stopPropagation(); unlockAudio(); if (active) stopAudio(); else void speak(id, text, lang); }}
-      className={`inline-flex shrink-0 items-center gap-2 rounded-full ${big ? "h-14 px-5" : "h-11 px-4"} text-[0.85rem] font-medium transition active:scale-95 ${
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full ${big ? "h-12 px-5" : "h-10 px-4"} text-[0.8rem] font-medium transition active:scale-95 ${
         dark ? "bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10 hover:bg-ink/10"
       }`}
     >
@@ -48,8 +48,8 @@ export function Card({ children, className = "", dark }: { children: React.React
 export function LanguagePill({ dark }: { dark?: boolean }) {
   const { lang, setLang, t } = usePlan();
   return (
-    <label className={`relative inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[0.8rem] ${dark ? "bg-white/10 text-white ring-1 ring-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10"}`}>
-      <Languages className="size-4" aria-hidden />
+    <label className={`relative inline-flex h-9 items-center gap-1 rounded-full px-2.5 text-[0.75rem] ${dark ? "bg-white/10 text-white ring-1 ring-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10"}`}>
+      <Languages className="size-3.5" aria-hidden />
       <span className="sr-only">{t.chooseLanguage}</span>
       <select
         value={lang}
@@ -63,42 +63,26 @@ export function LanguagePill({ dark }: { dark?: boolean }) {
 }
 
 export function TopBar({ dark = true, back }: { dark?: boolean; back?: string }) {
-  const path = usePathname();
   const router = useRouter();
   const { t, largeText, setLargeText, muted, setMuted } = usePlan();
-  const tabs = [
-    { href: "/plan", icon: Home, label: t.navPlan },
-    { href: "/medicines", icon: Pill, label: t.navMeds },
-    { href: "/checklist", icon: CheckSquare, label: t.navChecklist },
-  ];
-  const btn = `grid size-11 place-items-center rounded-full transition ${dark ? "text-white/80 hover:bg-white/10" : "text-ink/70 hover:bg-ink/5"}`;
+  const btn = `grid size-10 place-items-center rounded-full transition ${dark ? "text-white/80 hover:bg-white/10" : "text-ink/70 hover:bg-ink/5"}`;
   return (
-    <header className={`sticky top-0 z-30 px-3 pt-[max(env(safe-area-inset-top),10px)] pb-2 backdrop-blur-xl ${dark ? "bg-night/70" : "bg-paper/80"}`}>
-      <div className="flex items-center justify-between gap-1">
+    <header className={`sticky top-0 z-30 px-4 pt-[max(env(safe-area-inset-top),8px)] pb-2 backdrop-blur-xl ${dark ? "bg-night/60" : "bg-paper/80"}`}>
+      <div className="flex h-11 items-center justify-between gap-2">
         {back ? (
-          <button className={btn} onClick={() => router.push(back)} aria-label={t.back}><ArrowLeft className="size-5" /></button>
+          <button className={`${btn} -ml-2`} onClick={() => router.push(back)} aria-label={t.back}><ArrowLeft className="size-5" /></button>
         ) : (
-          <Link href="/how-it-works" className={btn} aria-label={t.howItWorks}><Info className="size-5" /></Link>
+          <Link href="/" className={`text-[1.15rem] font-light tracking-tight ${dark ? "text-white" : "text-ink"}`}>samjho</Link>
         )}
-        <nav className="flex items-center gap-1" aria-label="Main">
-          {tabs.map(({ href, icon: Icon, label }) => {
-            const on = path === href;
-            return (
-              <Link key={href} href={href} aria-label={label} aria-current={on ? "page" : undefined}
-                className={`relative grid h-11 w-12 place-items-center ${dark ? (on ? "text-white" : "text-white/50") : on ? "text-ink" : "text-ink/45"}`}>
-                <Icon className="size-5" strokeWidth={1.6} />
-                {on && <motion.span layoutId="tab" className={`absolute bottom-1 h-px w-6 ${dark ? "bg-white" : "bg-ink"}`} />}
-              </Link>
-            );
-          })}
-        </nav>
         <div className="flex items-center gap-1">
+          <LanguagePill dark={dark} />
           <button className={btn} onClick={() => { if (!muted) stopAudio(); setMuted(!muted); }} aria-label={muted ? t.unmute : t.mute}>
-            {muted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
+            {muted ? <VolumeX className="size-[18px]" /> : <Volume2 className="size-[18px]" />}
           </button>
-          <button className={`${btn} font-semibold`} onClick={() => setLargeText(!largeText)} aria-pressed={largeText} aria-label={t.largeText}>
-            <span className="flex items-baseline"><span className="text-[0.75rem]">A</span><span className="text-[1rem]">A</span></span>
+          <button className={`${btn} ${largeText ? (dark ? "bg-white/15" : "bg-ink/10") : ""}`} onClick={() => setLargeText(!largeText)} aria-pressed={largeText} aria-label={t.largeText}>
+            <Type className="size-[18px]" />
           </button>
+          <Link href="/how-it-works" className={btn} aria-label={t.howItWorks}><Info className="size-[18px]" /></Link>
         </div>
       </div>
     </header>
@@ -108,7 +92,7 @@ export function TopBar({ dark = true, back }: { dark?: boolean; back?: string })
 export function Disclaimer({ dark }: { dark?: boolean }) {
   const { t } = usePlan();
   return (
-    <p className={`mx-auto mt-8 max-w-sm px-6 pb-36 text-center text-[0.78rem] leading-relaxed ${dark ? "text-white/55" : "text-ink/55"}`}>
+    <p className={`mx-auto mt-8 max-w-sm px-6 pb-32 text-center text-[0.78rem] leading-relaxed ${dark ? "text-white/55" : "text-ink/55"}`}>
       <AlertTriangle className="mr-1 inline size-3.5 -translate-y-px" aria-hidden />{t.disclaimer}
     </p>
   );
@@ -127,15 +111,41 @@ export function TickBox({ checked, onChange, label }: { checked: boolean; onChan
   );
 }
 
+/** Bottom tab bar: Plan · Medicines · [Ask] · Checklist. */
 export function MicFab({ onClick, label }: { onClick: () => void; label: string }) {
+  const path = usePathname();
+  const { t } = usePlan();
+  const tabs = [
+    { href: "/plan", icon: Home, label: t.navPlan },
+    { href: "/medicines", icon: Pill, label: t.navMeds },
+    null,
+    { href: "/checklist", icon: CheckSquare, label: t.navChecklist },
+    { href: "/scan", icon: Camera, label: t.takePhoto },
+  ];
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[max(env(safe-area-inset-bottom),18px)]">
-      <button onClick={onClick} aria-label={label}
-        className="pointer-events-auto flex h-16 items-center gap-3 rounded-full bg-white pl-3 pr-6 text-ink shadow-[0_12px_40px_-8px_rgba(11,15,20,0.45)] ring-1 ring-ink/5 transition active:scale-95">
-        <span className="grid size-11 place-items-center rounded-full bg-night text-white"><Waveform /></span>
-        <span className="font-medium">{label}</span>
-      </button>
-    </div>
+    <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(env(safe-area-inset-bottom),10px)]">
+      <div className="flex h-[68px] items-center justify-around rounded-[26px] bg-white/95 px-1 shadow-[0_12px_40px_-10px_rgba(11,15,20,0.45)] ring-1 ring-ink/5 backdrop-blur-xl">
+        {tabs.map((tab, i) => {
+          if (!tab) {
+            return (
+              <button key="ask" onClick={onClick} aria-label={label} className="-mt-8 flex flex-col items-center gap-1">
+                <span className="grid size-14 place-items-center rounded-full bg-night text-white shadow-lg ring-4 ring-paper transition active:scale-95"><Waveform className="size-6" /></span>
+                <span className="text-[0.62rem] font-medium text-ink">{t.navAsk}</span>
+              </button>
+            );
+          }
+          const on = path === tab.href;
+          const Icon = tab.icon;
+          return (
+            <Link key={i} href={tab.href} aria-current={on ? "page" : undefined}
+              className={`flex min-w-14 flex-col items-center gap-1 rounded-2xl px-2 py-1.5 transition ${on ? "text-ink" : "text-ink/45"}`}>
+              <Icon className="size-5" strokeWidth={on ? 2 : 1.6} />
+              <span className="max-w-16 truncate text-[0.62rem] font-medium">{tab.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
   );
 }
 

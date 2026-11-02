@@ -32,7 +32,7 @@ export default function Welcome() {
         </div>
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="mt-14 text-center">
-          <h1 className="mt-5 text-balance text-[1.9rem] font-light leading-tight tracking-tight">
+          <h1 className="mt-5 text-balance text-[1.7rem] font-light leading-tight tracking-tight">
             {langInfo(lang).hello}.<br />{t.welcomeTitle}
           </h1>
           <p className="mx-auto mt-3 max-w-xs text-[0.95rem] text-white/70">{t.tagline}</p>
