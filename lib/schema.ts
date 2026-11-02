@@ -136,7 +136,7 @@ export function normalizePlan(raw: unknown): DischargePlan {
         duration_days: Number.isFinite(d) && d > 0 ? d : null,
         special_instructions: s(m.special_instructions),
         source_text: s(m.source_text),
-        confidence: m.confidence === "low" ? "low" : "high",
+        confidence: (m.confidence === "low" ? "low" : "high") as Confidence,
       };
     }).filter((m) => m.name),
     follow_ups: arr(r.follow_ups).map((f0) => {
