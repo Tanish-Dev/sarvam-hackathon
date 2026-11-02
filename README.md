@@ -12,13 +12,23 @@ Patients leave hospital with a dense discharge summary full of jargon and abbrev
 
 Photograph the paper. Samjho reads it, turns it into a simple recovery plan, **speaks it in the patient's language**, and answers questions by voice. Every answer is grounded in the patient's own paper.
 
-| Welcome | Your plan | Medicines | 7-day checklist |
-|---|---|---|---|
-| ![Welcome](docs/screenshots/welcome.png) | ![Plan](docs/screenshots/plan.png) | ![Medicines](docs/screenshots/medicines.png) | ![Checklist](docs/screenshots/checklist.png) |
+**Onboarding: welcome, language, how it works**
 
-| Ask by voice | How it works | Sample paper (for the live demo) |
+| Welcome | Choose language | How to use |
 |---|---|---|
-| ![Ask](docs/screenshots/ask.png) | ![How it works](docs/screenshots/how-it-works.png) | ![Sample paper](docs/screenshots/sample-paper.png) |
+| ![Welcome](docs/screenshots/welcome.png) | ![Language](docs/screenshots/language.png) | ![Guide](docs/screenshots/guide.png) |
+
+**The app**
+
+| Your plan | Medicines | 7-day checklist | Ask by voice |
+|---|---|---|---|
+| ![Plan](docs/screenshots/plan.png) | ![Medicines](docs/screenshots/medicines.png) | ![Checklist](docs/screenshots/checklist.png) | ![Ask](docs/screenshots/ask.png) |
+
+| Scan | How it works | Sample paper (for testing) |
+|---|---|---|
+| ![Scan](docs/screenshots/scan.png) | ![How it works](docs/screenshots/how-it-works.png) | ![Sample paper](public/sample-prescription.jpg) |
+
+**Testing without a real prescription:** on the "How to use" screen, tap **Scan the sample paper**. It loads a realistic sample discharge summary and runs the full live Sarvam pipeline.
 
 ## Sarvam pipeline
 

@@ -128,6 +128,7 @@ export const en = {
   tipTitle: "Your plan is ready",
   tipBody: "Tap Listen to hear any card. Tap the mic to ask a question. Tick doses as you take them.",
   gotIt: "Got it",
+  continue: "Continue",
 };
 
 export type UiKey = keyof typeof en;
@@ -262,6 +263,7 @@ export const hi: Dict = {
   tipTitle: "आपका प्लान तैयार है",
   tipBody: "किसी भी कार्ड को सुनने के लिए 'सुनें' दबाएँ। सवाल पूछने के लिए माइक दबाएँ। दवा लेने पर टिक करें।",
   gotIt: "ठीक है",
+  continue: "आगे बढ़ें",
 };
 
 export const mr: Dict = {
@@ -393,6 +395,7 @@ export const mr: Dict = {
   tipTitle: "तुमचा प्लॅन तयार आहे",
   tipBody: "कोणतेही कार्ड ऐकण्यासाठी 'ऐका' दाबा. प्रश्न विचारण्यासाठी माइक दाबा. औषध घेतल्यावर टिक करा.",
   gotIt: "ठीक आहे",
+  continue: "पुढे जा",
 };
 
 export const BUILTIN: Partial<Record<string, Dict>> = { "en-IN": en, "hi-IN": hi, "mr-IN": mr };

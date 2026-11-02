@@ -59,7 +59,7 @@ export default function Scan() {
   return (
     <Shell className="bg-paper">
       <header className="flex items-center justify-between px-3 pt-[max(env(safe-area-inset-top),10px)]">
-        <button onClick={() => router.push("/")} className="grid size-11 place-items-center rounded-full hover:bg-ink/5" aria-label={t.back}><ArrowLeft className="size-5" /></button>
+        <button onClick={() => router.push("/guide")} className="grid size-11 place-items-center rounded-full hover:bg-ink/5" aria-label={t.back}><ArrowLeft className="size-5" /></button>
         <LanguagePill />
       </header>
       <div className="px-5 pb-40">
