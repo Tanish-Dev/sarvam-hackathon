@@ -97,7 +97,7 @@ export function TopBar({ dark = true, back }: { dark?: boolean; back?: string })
             {muted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
           </button>
           <button className={`${btn} font-semibold`} onClick={() => setLargeText(!largeText)} aria-pressed={largeText} aria-label={t.largeText}>
-            <span className="text-[0.8rem]">A</span><span className="text-[1.1rem]">A</span>
+            <span className="flex items-baseline"><span className="text-[0.75rem]">A</span><span className="text-[1rem]">A</span></span>
           </button>
         </div>
       </div>

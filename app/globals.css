@@ -12,7 +12,7 @@
   --color-alert: #E5484D;
   --color-sage: #5E9C7D;
   --font-sans: var(--font-geist-sans), var(--font-deva), var(--font-beng), var(--font-gujr), var(--font-guru), var(--font-knda), var(--font-mlym), var(--font-orya), var(--font-taml), var(--font-telu), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-mono: var(--font-geist-mono), var(--font-deva), var(--font-beng), var(--font-gujr), var(--font-guru), var(--font-knda), var(--font-mlym), var(--font-orya), var(--font-taml), var(--font-telu), ui-monospace, monospace;
 }
 
 html { font-size: 18px; background: #0B0F14; color-scheme: light; }
@@ -50,3 +50,6 @@ body { background: #0B0F14; color: #0B0F14; font-family: var(--font-sans); -webk
 
 /* White buttons always get dark text */
 button.bg-white, a.bg-white, button[class*="bg-white "], a[class*="bg-white "] { color: #0B0F14; }
+
+/* Letter-spacing breaks Indic conjuncts — only track Latin labels */
+html:not([lang="en-IN"]) .font-mono { letter-spacing: 0 !important; }
