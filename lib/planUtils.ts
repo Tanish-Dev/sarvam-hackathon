@@ -64,16 +64,16 @@ export function medScript(m: Medicine, t: Dict) {
 }
 
 export function shareText(p: DischargePlan, t: Dict) {
-  const lines = [`🩺 ${t.shareTitle} — ${p.patient.name}`, p.diagnosis_simple, "", `💊 ${t.medicinesTitle}`];
+  const lines = [`${t.shareTitle} — ${p.patient.name}`, p.diagnosis_simple, "", t.medicinesTitle];
   p.medicines.forEach((m) => lines.push(`• ${m.name} — ${timesText(m, t)}${foodText(m, t) ? `, ${foodText(m, t)}` : ""} (${m.purpose_simple})`));
   if (p.follow_ups.length) {
-    lines.push("", `📅 ${t.followUp}`);
+    lines.push("", t.followUp);
     p.follow_ups.forEach((f) => lines.push(`• ${f.what} — ${f.date_iso || f.relative_text}${f.where ? `, ${f.where}` : ""}`));
   }
   if (p.warning_signs.length) {
-    lines.push("", `🚨 ${t.warningSigns}:`);
+    lines.push("", `${t.warningSigns}:`);
     p.warning_signs.forEach((w) => lines.push(`• ${w.sign_simple}`));
-    lines.push(`📞 ${t.call108}`);
+    lines.push(t.call108);
   }
   lines.push("", t.disclaimer, "— Samjho");
   return lines.join("\n");

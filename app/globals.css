@@ -47,3 +47,6 @@ body { background: #0B0F14; color: #0B0F14; font-family: var(--font-sans); -webk
   .print-only { display: block !important; }
 }
 .print-only { display: none; }
+
+/* White buttons always get dark text */
+button.bg-white, a.bg-white, button[class*="bg-white "], a[class*="bg-white "] { color: #0B0F14; }

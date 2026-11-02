@@ -262,7 +262,7 @@ export default function PlanPage() {
           </tbody>
         </table>
         {follow && <p className="mt-4"><b>{t.followUp}:</b> {follow.what} — {follow.date_iso || follow.relative_text}</p>}
-        <p className="mt-3"><b>🚨 {t.warningSigns}:</b> {plan.warning_signs.map((w) => w.sign_simple).join("; ")}. <b>{t.call108}</b></p>
+        <p className="mt-3"><b>{t.warningSigns}:</b> {plan.warning_signs.map((w) => w.sign_simple).join("; ")}. <b>{t.call108}</b></p>
         <p className="mt-4 text-xs">{t.disclaimer}</p>
       </div>
     </Shell>
