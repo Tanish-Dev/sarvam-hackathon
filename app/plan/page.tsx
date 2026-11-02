@@ -65,7 +65,7 @@ export default function PlanPage() {
         <div className="hero-gradient relative overflow-hidden rounded-b-[36px] text-white">
           <div className="pointer-events-none absolute -top-10 left-1/2 size-[420px] -translate-x-1/2 rounded-full bg-teal/40 blur-3xl drift" aria-hidden />
           <TopBar />
-          <div className="relative flex min-h-[46dvh] pt-6 flex-col items-center justify-center px-7 pb-14 text-center">
+          <div className="relative flex min-h-[calc(var(--app-h)*0.46)] pt-6 flex-col items-center justify-center px-7 pb-14 text-center">
             {isSample && <Label className="mb-4 rounded-full bg-white/10 px-3 py-1 text-white/70 ring-1 ring-white/15">{t.sampleBadge}</Label>}
             <motion.p key={greeting} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
               className="text-balance text-[1.6rem] font-light leading-snug tracking-tight">

@@ -3,6 +3,7 @@ import {
   Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Sans_Devanagari, Noto_Sans_Gujarati, Noto_Sans_Gurmukhi,
   Noto_Sans_Kannada, Noto_Sans_Malayalam, Noto_Sans_Oriya, Noto_Sans_Tamil, Noto_Sans_Telugu,
 } from "next/font/google";
+import { DeviceFrame } from "@/components/DeviceFrame";
 import { PlanProvider } from "@/components/PlanProvider";
 import "./globals.css";
 
@@ -30,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="hi-IN" className={`${fonts} antialiased`}>
       <body className="min-h-dvh">
-        <PlanProvider>{children}</PlanProvider>
+        <PlanProvider><DeviceFrame>{children}</DeviceFrame></PlanProvider>
       </body>
     </html>
   );

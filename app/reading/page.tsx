@@ -72,7 +72,7 @@ export default function Reading() {
         <div className="absolute -right-24 top-1/3 size-80 rounded-full bg-rose/40 blur-3xl drift [animation-delay:-6s]" />
         {text && <pre className="absolute inset-x-6 top-24 whitespace-pre-wrap font-mono text-[0.6rem] leading-relaxed text-white/[0.13]">{text.slice(0, 1800)}</pre>}
       </div>
-      <div className="relative flex min-h-dvh flex-col justify-center px-6">
+      <div className="relative flex min-h-(--app-h) flex-col justify-center px-6">
         {!error ? (
           <>
             <h1 className="text-center text-[1.5rem] font-light tracking-tight">{t.readingTitle}</h1>

@@ -67,7 +67,7 @@ export function TopBar({ dark = true, back }: { dark?: boolean; back?: string })
   const { t, largeText, setLargeText, muted, setMuted } = usePlan();
   const btn = `grid size-10 place-items-center rounded-full transition ${dark ? "text-white/80 hover:bg-white/10" : "text-ink/70 hover:bg-ink/5"}`;
   return (
-    <header className={`sticky top-0 z-30 px-4 pt-[max(env(safe-area-inset-top),8px)] pb-2 backdrop-blur-xl ${dark ? "bg-night/60" : "bg-paper/80"}`}>
+    <header className={`sticky top-0 z-30 px-4 pt-[max(var(--safe-top),8px)] pb-2 backdrop-blur-xl ${dark ? "bg-night/60" : "bg-paper/80"}`}>
       <div className="flex h-11 items-center justify-between gap-2">
         {back ? (
           <button className={`${btn} -ml-2`} onClick={() => router.push(back)} aria-label={t.back}><ArrowLeft className="size-5" /></button>
@@ -111,8 +111,8 @@ export function TickBox({ checked, onChange, label }: { checked: boolean; onChan
   );
 }
 
-/** Bottom tab bar: Plan · Medicines · [Ask] · Checklist. */
-export function MicFab({ onClick, label }: { onClick: () => void; label: string }) {
+/** Bottom tab bar: Plan · Medicines · [Ask] · Checklist · Scan. Frosted glass; pass `dark` on dark pages. */
+export function MicFab({ onClick, label, dark = false }: { onClick: () => void; label: string; dark?: boolean }) {
   const path = usePathname();
   const { t } = usePlan();
   const tabs = [
@@ -123,14 +123,16 @@ export function MicFab({ onClick, label }: { onClick: () => void; label: string 
     { href: "/scan", icon: Camera, label: t.takePhoto },
   ];
   return (
-    <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(env(safe-area-inset-bottom),10px)]">
-      <div className="flex h-[68px] items-center justify-around rounded-[26px] bg-white/70 px-1 shadow-[0_12px_40px_-12px_rgba(11,15,20,0.4)] ring-1 ring-white/70 backdrop-blur-2xl">
+    <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(var(--safe-bottom),10px)]">
+      <div className={`flex h-[68px] items-center justify-around rounded-[30px] px-1.5 ${dark ? "glass-dark" : "glass-light"}`}>
         {tabs.map((tab, i) => {
           if (!tab) {
             return (
-              <button key="ask" onClick={onClick} aria-label={label} className="-mt-8 flex flex-col items-center gap-1">
-                <span className="grid size-14 place-items-center rounded-full bg-night text-white shadow-lg ring-4 ring-white/70 transition active:scale-95"><Waveform className="size-6" /></span>
-                <span className="text-[0.62rem] font-normal text-ink">{t.navAsk}</span>
+              <button key="ask" onClick={onClick} aria-label={label} className="-mt-9 flex flex-col items-center gap-1">
+                <span className={`grid size-[58px] place-items-center rounded-full p-[5px] ${dark ? "glass-dark" : "glass-light"}`}>
+                  <span className="glass-orb grid size-full place-items-center rounded-full text-white transition active:scale-95"><Waveform className="size-6" /></span>
+                </span>
+                <span className={`text-[0.62rem] font-normal ${dark ? "text-white" : "text-ink"}`}>{t.navAsk}</span>
               </button>
             );
           }
@@ -138,7 +140,8 @@ export function MicFab({ onClick, label }: { onClick: () => void; label: string 
           const Icon = tab.icon;
           return (
             <Link key={i} href={tab.href} aria-current={on ? "page" : undefined}
-              className={`flex min-w-14 flex-col items-center gap-1 rounded-2xl px-2 py-1.5 transition ${on ? "text-ink" : "text-ink/45"}`}>
+              className={`flex min-w-14 flex-col items-center gap-1 rounded-[22px] px-2 py-1.5 transition ${
+                on ? (dark ? "glass-pill-dark text-white" : "glass-pill-light text-ink") : dark ? "text-white/50 hover:text-white/80" : "text-ink/45 hover:text-ink/70"}`}>
               <Icon className="size-5" strokeWidth={on ? 2 : 1.6} />
               <span className="max-w-16 truncate text-[0.62rem] font-normal">{tab.label}</span>
             </Link>
@@ -158,5 +161,5 @@ export function Waveform({ className = "size-5" }: { className?: string }) {
 }
 
 export function Shell({ children, className = "" }: { children?: React.ReactNode; className?: string }) {
-  return <div className={`relative mx-auto min-h-dvh w-full max-w-[440px] overflow-x-clip ${className}`}>{children}</div>;
+  return <div className={`relative mx-auto min-h-(--app-h) w-full max-w-[440px] overflow-x-clip ${className}`}>{children}</div>;
 }

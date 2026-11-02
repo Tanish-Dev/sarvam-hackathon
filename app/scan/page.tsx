@@ -58,7 +58,7 @@ export default function Scan() {
 
   return (
     <Shell className="bg-paper">
-      <header className="flex items-center justify-between px-3 pt-[max(env(safe-area-inset-top),10px)]">
+      <header className="flex items-center justify-between px-3 pt-[max(var(--safe-top),10px)]">
         <button onClick={() => router.push("/guide")} className="grid size-11 place-items-center rounded-full hover:bg-ink/5" aria-label={t.back}><ArrowLeft className="size-5" /></button>
         <LanguagePill />
       </header>
@@ -117,7 +117,7 @@ export default function Scan() {
         {msg && <p role="alert" className="mt-3 text-center text-[0.9rem] text-alert">{msg}</p>}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[440px] bg-gradient-to-t from-paper via-paper to-transparent px-5 pt-8 pb-[max(env(safe-area-inset-bottom),18px)]">
+      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[440px] bg-gradient-to-t from-paper via-paper to-transparent px-5 pt-8 pb-[max(var(--safe-bottom),18px)]">
         <button disabled={!files.length || busy} onClick={() => router.push("/reading")}
           className="h-14 w-full rounded-full bg-night text-[0.95rem] font-light text-white shadow-xl transition disabled:opacity-35 active:scale-[0.98]">
           {t.explainPaper}

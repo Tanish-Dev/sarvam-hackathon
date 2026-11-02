@@ -17,7 +17,7 @@ export function OnboardingFrame({ step, children, footer }: { step: 1 | 2 | 3; c
         <div className="absolute -top-32 left-1/2 size-[560px] -translate-x-1/2 rounded-full bg-teal/45 blur-3xl drift" />
         <div className="absolute bottom-[-120px] -right-32 size-[420px] rounded-full bg-rose/25 blur-3xl drift [animation-delay:-5s]" />
       </div>
-      <div className="relative flex min-h-dvh flex-col px-5 pt-[max(env(safe-area-inset-top),14px)] pb-[max(env(safe-area-inset-bottom),20px)]">
+      <div className="relative flex min-h-(--app-h) flex-col px-5 pt-[max(var(--safe-top),14px)] pb-[max(var(--safe-bottom),20px)]">
         <header className="flex h-11 items-center justify-between">
           <Link href="/" className="flex items-baseline gap-2">
             <span className="text-[1.2rem] font-light tracking-tight">samjho</span>

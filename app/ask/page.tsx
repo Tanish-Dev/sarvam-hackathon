@@ -83,7 +83,7 @@ export default function Ask() {
         <div className={`absolute left-1/2 top-1/3 size-[460px] -translate-x-1/2 rounded-full blur-3xl drift ${emergency ? "bg-alert/40" : "bg-teal/40"}`} />
       </div>
       <TopBar back="/plan" />
-      <div className="relative flex min-h-[calc(100dvh-64px)] flex-col px-6 pb-[max(env(safe-area-inset-bottom),18px)]">
+      <div className="relative flex min-h-[calc(var(--app-h)-64px)] flex-col px-6 pb-[max(var(--safe-bottom),18px)]">
         {emergency && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} role="alert" className="mt-2 rounded-[22px] bg-alert p-4 text-white shadow-xl">
             <p className="font-medium leading-snug">{t.emergency}</p>

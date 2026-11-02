@@ -87,7 +87,7 @@ export default function Medicines() {
         </ul>
       </div>
       <Disclaimer dark />
-      <MicFab onClick={() => router.push("/ask")} label={t.askAnything} />
+      <MicFab dark onClick={() => router.push("/ask")} label={t.askAnything} />
     </Shell>
   );
 }
