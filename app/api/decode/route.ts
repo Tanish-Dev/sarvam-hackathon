@@ -3,7 +3,7 @@ import { DECODE_SYSTEM } from "@/lib/prompts";
 import { normalizePlan, planJsonSchema } from "@/lib/schema";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +19,8 @@ export async function POST(req: Request) {
       schemaName: "discharge_plan",
       schema: planJsonSchema,
       maxTokens: 16000,
-      reasoning: "low",
+      reasoning: "none",
+      timeoutMs: 280_000,
     });
     const plan = normalizePlan(raw);
     if (!plan.medicines.length && !plan.diagnosis_simple) {

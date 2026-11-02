@@ -4,7 +4,7 @@ import { isLang, langInfo, type LangCode } from "@/lib/langs";
 import { normalizePlan } from "@/lib/schema";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 // Deterministic safety net — runs even if the model misses it.
 const RED_FLAGS = [

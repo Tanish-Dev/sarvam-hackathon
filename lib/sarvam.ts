@@ -105,6 +105,7 @@ export async function chatJson(opts: {
   maxTokens: number;
   reasoning?: "none" | "low" | "high";
   temperature?: number;
+  timeoutMs?: number;
 }): Promise<unknown> {
   const base = {
     model: "sarvam-105b",
@@ -118,7 +119,7 @@ export async function chatJson(opts: {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
-    }).then((r) => r.json() as Promise<{ choices?: { message?: { content?: string } }[] }>);
+    }, opts.timeoutMs).then((r) => r.json() as Promise<{ choices?: { message?: { content?: string } }[] }>);
 
   let data;
   try {

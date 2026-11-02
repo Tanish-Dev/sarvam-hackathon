@@ -3,7 +3,7 @@ import { translateSystem } from "@/lib/prompts";
 import { isLang, langInfo } from "@/lib/langs";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 const schema = {
   type: "object", additionalProperties: false, required: ["t"],
