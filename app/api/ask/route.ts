@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         type: "object", additionalProperties: false, required: ["answer", "emergency"],
         properties: { answer: { type: "string" }, emergency: { type: "boolean" } },
       },
-      maxTokens: 1200, reasoning: "low", temperature: 0.2,
+      maxTokens: 6000, reasoning: "low", temperature: 0.2,
     })) as { answer?: string; emergency?: boolean };
 
     const q = question.toLowerCase();

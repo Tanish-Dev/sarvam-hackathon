@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       ],
       schemaName: "discharge_plan",
       schema: planJsonSchema,
-      maxTokens: 4000,
+      maxTokens: 16000,
       reasoning: "low",
     });
     const plan = normalizePlan(raw);
