@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<title>Samjho Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500&family=Noto+Sans+Devanagari:wght@200;300;400;500&family=Noto+Sans+Gujarati:wght@300;400;500&family=Noto+Sans+Gurmukhi:wght@300;400;500&family=Noto+Sans+Kannada:wght@300;400;500&family=Noto+Sans+Malayalam:wght@300;400;500&family=Noto+Sans+Oriya:wght@300;400;500&family=Noto+Sans+Tamil:wght@300;400;500&family=Noto+Sans+Telugu:wght@300;400;500&family=Caveat:wght@500&display=block" rel="stylesheet">
+<style>
+@font-face { font-family: "Geist"; src: url(assets/geist-latin.woff2) format("woff2"); font-weight: 100 900; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(assets/geist-mono-latin.woff2) format("woff2"); font-weight: 100 900; font-display: block; }
+
+:root {
+  --night: #0B0F14; --slate: #1C2A3A; --teal: #3E5C66; --mist: #C9D1D6; --paper: #EEF1F3;
+  --ink: #0B0F14; --peach: #E8B79A; --rose: #C98E8E; --alert: #E5484D; --sage: #5E9C7D;
+  --sans: "Geist", "Noto Sans Devanagari", "Noto Sans Bengali", "Noto Sans Gujarati", "Noto Sans Gurmukhi", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Oriya", "Noto Sans Tamil", "Noto Sans Telugu", system-ui, sans-serif;
+  --mono: "Geist Mono", "Noto Sans Devanagari", ui-monospace, monospace;
+  --hair: rgba(11, 15, 20, 0.1);
+}
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; font-weight: 400; }
+p { margin: 0; }
+.ic { display: inline-block; vertical-align: middle; flex: none; }
+
+/* ---------- page frame ---------- */
+.page {
+  width: 794px; height: 1123px; position: relative; overflow: hidden; page-break-after: always; break-after: page;
+  padding: 34px 56px 0;
+  background:
+    radial-gradient(60% 30% at 100% 0%, rgba(232, 183, 154, 0.26) 0%, transparent 70%),
+    radial-gradient(55% 28% at 0% 50%, rgba(62, 92, 102, 0.14) 0%, transparent 70%),
+    radial-gradient(60% 30% at 100% 95%, rgba(201, 142, 142, 0.16) 0%, transparent 70%),
+    var(--paper);
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+.page.dark { background: var(--night); color: #fff; }
+.run-h { display: flex; justify-content: space-between; align-items: flex-end; height: 44px; border-bottom: 1px solid var(--hair); position: relative; z-index: 2; }
+.dark .run-h { border-color: rgba(255, 255, 255, 0.1); }
+.wm { font-size: 21px; font-weight: 300; letter-spacing: -0.025em; line-height: 1; padding-bottom: 12px; display: flex; align-items: baseline; gap: 9px; }
+.sec { font-size: 12px; padding-bottom: 11px; border-bottom: 1px solid currentColor; margin-bottom: -1px; display: flex; gap: 8px; align-items: baseline; }
+.sec b { font-family: var(--mono); font-weight: 400; font-size: 11px; }
+.run-f { position: absolute; left: 56px; right: 56px; bottom: 26px; border-top: 1px solid var(--hair); padding-top: 11px; display: flex; justify-content: space-between; font-size: 10.5px; color: rgba(11, 15, 20, 0.5); z-index: 2; }
+.dark .run-f { border-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); }
+.run-f span:last-child { font-family: var(--mono); }
+
+/* ---------- type ---------- */
+.label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(11, 15, 20, 0.5); }
+.dark .label, .on-dark .label, .card.night .label { color: rgba(255, 255, 255, 0.5); }
+.label.dot::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 9px; background: currentColor; opacity: 0.7; margin-right: 7px; vertical-align: 1px; }
+h1.t { font-size: 31px; font-weight: 300; letter-spacing: -0.025em; line-height: 1.12; margin: 26px 0 9px; }
+.lead { font-size: 14px; line-height: 1.6; color: rgba(11, 15, 20, 0.68); max-width: 590px; font-weight: 300; }
+h2.s { font-size: 19px; font-weight: 300; letter-spacing: -0.015em; margin: 0 0 12px; }
+.mono { font-family: var(--mono); }
+.muted { color: rgba(11, 15, 20, 0.55); }
+.small { font-size: 12px; line-height: 1.55; }
+.rule { height: 1px; background: var(--hair); margin: 18px 0; }
+code { font-family: var(--mono); font-size: 0.86em; background: rgba(11, 15, 20, 0.05); padding: 1px 5px; border-radius: 6px; }
+.dark code, .on-dark code { background: rgba(255, 255, 255, 0.1); }
+
+/* ---------- doc surfaces ---------- */
+.card { border-radius: 22px; padding: 18px 20px; background: rgba(255, 255, 255, 0.68); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.85), 0 10px 30px -14px rgba(11, 15, 20, 0.2); }
+.card.dusk { background: linear-gradient(160deg, #1C2A3A 0%, #3E5C66 35%, #C98E8E 80%, #E8B79A 100%); color: #fff; box-shadow: 0 16px 40px -18px rgba(28, 42, 58, 0.6); }
+.card.night { background: var(--night); color: #fff; box-shadow: 0 16px 40px -18px rgba(11, 15, 20, 0.6); }
+.card.glassd { background: rgba(255, 255, 255, 0.07); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14); color: #fff; }
+.card h3 { font-size: 15px; font-weight: 400; margin: 10px 0 5px; letter-spacing: -0.01em; }
+.card p { font-size: 12.5px; line-height: 1.55; }
+.card.dusk p, .card.night p, .card.glassd p { color: rgba(255, 255, 255, 0.8); }
+.glyph { display: grid; grid-template-columns: 5px 5px; gap: 2px; }
+.glyph i { width: 5px; height: 5px; border-radius: 9px; background: currentColor; opacity: 0.25; }
+.glyph i:first-child, .glyph i:last-child { opacity: 0.85; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.bottom { position: absolute; left: 56px; right: 56px; bottom: 74px; }
+
+table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.t th { text-align: left; font-weight: 400; font-size: 11px; color: rgba(11, 15, 20, 0.5); padding: 0 12px 9px 0; border-bottom: 1px solid var(--hair); }
+table.t td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--hair); vertical-align: top; line-height: 1.45; color: rgba(11, 15, 20, 0.7); }
+table.t td:first-child { color: var(--ink); }
+table.t.tight td { padding-top: 7px; padding-bottom: 7px; }
+
+/* ---------- app components (true size) ---------- */
+.pill-btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; white-space: nowrap; }
+.listen { height: 40px; padding: 0 16px; font-size: 12.8px; background: rgba(11, 15, 20, 0.05); box-shadow: inset 0 0 0 1px rgba(11, 15, 20, 0.1); color: var(--ink); }
+.listen.d { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15); color: #fff; }
+.listen.big { height: 48px; padding: 0 20px; }
+.langpill { height: 36px; padding: 0 10px; gap: 5px; font-size: 12px; background: rgba(11, 15, 20, 0.05); box-shadow: inset 0 0 0 1px rgba(11, 15, 20, 0.1); }
+.langpill.d { background: rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15); color: #fff; }
+.iconbtn { width: 40px; height: 40px; border-radius: 99px; display: grid; place-items: center; color: rgba(11, 15, 20, 0.7); }
+.on-dark .iconbtn, .iconbtn.d { color: rgba(255, 255, 255, 0.8); }
+.iconbtn.on { background: rgba(255, 255, 255, 0.15); }
+.tick { width: 28px; height: 28px; border-radius: 99px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 0 0 1px rgba(11, 15, 20, 0.15); flex: none; }
+.tick.on { background: var(--sage); color: #fff; box-shadow: none; }
+.topbar { height: 60px; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; width: 393px; border-radius: 18px; }
+.topbar.d { background: rgba(11, 15, 20, 0.92); color: #fff; }
+.topbar.l { background: rgba(238, 241, 243, 0.9); box-shadow: 0 0 0 1px var(--hair); }
+.topbar .wmk { font-size: 18.4px; font-weight: 300; letter-spacing: -0.025em; }
+.btn-primary { height: 56px; width: 100%; justify-content: center; font-size: 15.2px; font-weight: 300; color: #fff; background: rgba(255, 255, 255, 0.16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 20px 50px -15px rgba(0, 0, 0, 0.6); }
+.btn-white { height: 48px; padding: 0 20px; background: #fff; color: var(--ink); font-size: 14px; }
+.btn-ring { height: 40px; padding: 0 16px; font-size: 12px; color: rgba(255, 255, 255, 0.75); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15); }
+.btn-alert { height: 48px; padding: 0 20px; background: var(--alert); color: #fff; font-weight: 500; font-size: 14px; }
+.tile { height: 64px; border-radius: 22px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.6px; }
+.slide { height: 64px; border-radius: 99px; background: var(--night); color: #fff; position: relative; display: flex; align-items: center; justify-content: center; padding-left: 56px; font-size: 13.5px; }
+.slide .thumb { position: absolute; left: 4px; top: 4px; width: 56px; height: 56px; border-radius: 99px; background: #fff; color: var(--ink); display: grid; place-items: center; }
+.slide.done { background: var(--sage); padding-left: 0; gap: 8px; }
+.dots { display: flex; gap: 6px; align-items: center; }
+.dots i { height: 4px; width: 6px; border-radius: 9px; background: rgba(255, 255, 255, 0.3); }
+.dots i.on { width: 24px; background: #fff; }
+.appcard { border-radius: 28px; padding: 20px; background: rgba(255, 255, 255, 0.65); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 10px 30px -14px rgba(11, 15, 20, 0.18); }
+.appcard.d { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12); color: #fff; }
+.tabbar { width: 393px; height: 68px; border-radius: 30px; display: flex; align-items: center; justify-content: space-around; padding: 0 6px; position: relative; }
+.tabbar.l { background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.6)); box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(255, 255, 255, 0.55), 0 14px 40px -14px rgba(11, 15, 20, 0.35); color: rgba(11, 15, 20, 0.45); }
+.tabbar.d { background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05)), rgba(11, 15, 20, 0.35); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; padding: 6px 8px; border-radius: 22px; font-size: 9.9px; }
+.tabbar.l .tab.on { background: rgba(255, 255, 255, 0.7); box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(11, 15, 20, 0.05), 0 4px 12px -6px rgba(11, 15, 20, 0.25); color: var(--ink); }
+.tabbar.d .tab.on { background: rgba(255, 255, 255, 0.12); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22); color: #fff; }
+.ask { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: -36px; font-size: 9.9px; }
+.tabbar.l .ask { color: var(--ink); } .tabbar.d .ask { color: #fff; }
+.ask .ring { width: 58px; height: 58px; border-radius: 99px; padding: 5px; }
+.tabbar.l .ask .ring { background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6)); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 8px 20px -10px rgba(11, 15, 20, 0.35); }
+.tabbar.d .ask .ring { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.orb { width: 100%; height: 100%; border-radius: 99px; display: grid; place-items: center; color: #fff; background: radial-gradient(120% 90% at 50% 0%, #3E5C66 0%, #1C2A3A 45%, #0B0F14 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -6px 12px rgba(0, 0, 0, 0.35), 0 6px 16px -6px rgba(11, 15, 20, 0.6); }
+
+/* ---------- specimen frame ---------- */
+.spec { border-radius: 20px; overflow: hidden; background: rgba(255, 255, 255, 0.55); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.85); }
+.spec .stage { padding: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 76px; }
+.spec .stage.n { background: radial-gradient(90% 120% at 20% 0%, rgba(62, 92, 102, 0.6), transparent 60%), var(--night); color: #fff; }
+.spec .stage.w { background: radial-gradient(70% 90% at 100% 0%, rgba(232, 183, 154, 0.35), transparent 70%), radial-gradient(60% 90% at 0% 100%, rgba(62, 92, 102, 0.22), transparent 70%), var(--paper); }
+.spec .meta { padding: 11px 16px 13px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-top: 1px solid var(--hair); }
+.spec .meta b { font-weight: 400; font-size: 13px; }
+.spec .meta span { font-family: var(--mono); font-size: 10px; color: rgba(11, 15, 20, 0.45); }
+.spec .note { padding: 0 16px 14px; font-size: 11.5px; line-height: 1.5; color: rgba(11, 15, 20, 0.6); margin-top: -4px; }
+
+.spec.dk { background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.spec.dk .meta { border-color: rgba(255, 255, 255, 0.1); }
+.spec.dk .meta span, .spec.dk .note { color: rgba(255, 255, 255, 0.55); }
+.phone { border-radius: 26px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 30px 60px -24px rgba(0, 0, 0, 0.8); }
+.phone img { display: block; width: 100%; }
+.page:not(.dark) .phone { box-shadow: 0 0 0 1px rgba(11, 15, 20, 0.08), 0 30px 50px -26px rgba(11, 15, 20, 0.55); }
+.blob { position: absolute; border-radius: 999px; filter: blur(70px); pointer-events: none; }
+.chip { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 99px; font-size: 11px; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- ======================= 1. COVER ======================= -->
+<section class="page dark">
+  <div class="blob" style="width:620px;height:620px;left:90px;top:-300px;background:rgba(62,92,102,0.75)"></div>
+  <div class="blob" style="width:480px;height:480px;right:-180px;bottom:-120px;background:rgba(201,142,142,0.35)"></div>
+  <div class="run-h"><div class="wm">samjho <span class="label" style="font-size:9.5px">Sarvam AI</span></div><div class="sec">Design system</div></div>
+
+  <div style="position:relative;z-index:1">
+    <div class="chip" style="margin-top:34px;background:rgba(255,255,255,0.1);box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 0 0 1px rgba(255,255,255,0.08);color:rgba(255,255,255,0.8)">Samjho · Fonts, colour, components · v1</div>
+    <h1 style="font-size:58px;font-weight:200;letter-spacing:-0.04em;line-height:1.02;margin:20px 0 0">Calm and clear,<br>in the patient's<br><span style="color:rgba(255,255,255,0.42)">own language.</span></h1>
+
+    <div style="display:flex;align-items:flex-start;gap:24px;margin-top:22px">
+      <div style="font-size:150px;font-weight:100;letter-spacing:-0.06em;line-height:0.82">11</div>
+      <div style="padding-top:12px;max-width:330px">
+        <span class="chip" style="background:var(--peach);color:var(--night);height:22px">10 scripts · 1 font stack</span>
+        <p style="margin-top:12px;font-size:13px;line-height:1.6;color:rgba(255,255,255,0.65);font-weight:300">Languages Samjho explains and reads aloud in. Every colour, typeface and component in this guide exists to help a patient follow their discharge paper at home.</p>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:18px;margin-top:26px;align-items:flex-start">
+      <figure style="margin:0;width:126px"><div class="phone"><img src="assets/welcome.jpg"></div><figcaption class="label" style="margin-top:9px">Welcome</figcaption></figure>
+      <figure style="margin:16px 0 0;width:126px"><div class="phone"><img src="assets/plan.jpg"></div><figcaption class="label" style="margin-top:9px">Plan</figcaption></figure>
+      <figure style="margin:32px 0 0;width:126px"><div class="phone"><img src="assets/medicines.jpg"></div><figcaption class="label" style="margin-top:9px">Medicines</figcaption></figure>
+      <figure style="margin:48px 0 0;width:126px"><div class="phone"><img src="assets/ask.jpg"></div><figcaption class="label" style="margin-top:9px">Ask</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="bottom grid2" style="z-index:1">
+    <div class="card dusk">
+      <div class="glyph"><i></i><i></i><i></i><i></i></div>
+      <h3>What it is</h3>
+      <p>The shared visual language of Samjho: a night-to-dusk palette, Geist set light, and frosted-glass surfaces, all defined once in <span class="mono" style="font-size:11px">app/globals.css</span>.</p>
+    </div>
+    <div class="card glassd">
+      <div class="glyph"><i></i><i></i><i></i><i></i></div>
+      <h3>What's inside</h3>
+      <p>Foundations · Colour · Typography · Scripts · Layout and surfaces · Controls · Containers · Navigation and context · Icons, motion and rules</p>
+    </div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>01 / 10</span></div>
+</section>
+
+<!-- ======================= 2. FOUNDATIONS ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>01</b> Foundations</div></div>
+  <h1 class="t">Built for a tired patient, not a power user.</h1>
+  <p class="lead">People open Samjho right after a hospital stay. Many are older, many read Hindi or Tamil before English, and all of them have a paper full of drug names they need to act on. The design system keeps that moment calm and readable.</p>
+
+  <div style="display:grid;grid-template-columns:150px 1fr 1fr 1fr;gap:22px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:22px 0;margin-top:24px">
+    <div><div style="font-size:84px;font-weight:200;line-height:0.9;letter-spacing:-0.05em">3</div><div class="label dot" style="margin-top:12px">Principles, in order</div></div>
+    <div><div style="font-size:15px">Calm before clever</div><p class="small muted" style="margin-top:6px">Dark hero, light reading surfaces, light type weights, slow easing. Nothing flashes and nothing is bold.</p></div>
+    <div><div style="font-size:15px">Every language first-class</div><p class="small muted" style="margin-top:6px">Eleven languages, ten scripts, one font stack. Layouts are checked with long Indic strings, not just English.</p></div>
+    <div><div style="font-size:15px">One phone, everywhere</div><p class="small muted" style="margin-top:6px">A single 440px column. On a laptop it sits inside an iPhone frame, so a demo looks like the real thing.</p></div>
+  </div>
+
+  <h2 class="s" style="margin-top:26px">How the system is wired</h2>
+  <div style="display:grid;grid-template-columns:1fr 26px 1fr 26px 1fr;align-items:center">
+    <div class="card" style="padding:15px 16px"><div class="label dot">Tokens · globals.css</div><p style="margin-top:8px;font-size:12.5px;line-height:1.5"><code>@theme inline</code> colours and font stacks, gradients, glass classes, keyframes</p></div>
+    <div style="text-align:center;color:rgba(11,15,20,0.4)">{{i:arrow-right:16}}</div>
+    <div class="card" style="padding:15px 16px;box-shadow:0 0 0 1.5px var(--peach),0 10px 30px -14px rgba(11,15,20,0.2)"><div class="label dot">Utilities · Tailwind v4</div><p style="margin-top:8px;font-size:12.5px;line-height:1.5"><code>bg-night</code> <code>text-ink/70</code> <code>font-mono</code> <code>ring-white/15</code></p></div>
+    <div style="text-align:center;color:rgba(11,15,20,0.4)">{{i:arrow-right:16}}</div>
+    <div class="card" style="padding:15px 16px"><div class="label dot">Components · ui.tsx</div><p style="margin-top:8px;font-size:12.5px;line-height:1.5">Card, TopBar, MicFab, ListenButton, TickBox and friends, each with a <code>dark</code> prop</p></div>
+  </div>
+
+  <h2 class="s" style="margin-top:24px">Where it lives</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:28px;border-top:1px solid var(--hair)">
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">app/globals.css</div><p class="small muted" style="margin-top:3px">Tokens, font stacks, gradients, glass, keyframes, device frame</p></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">app/layout.tsx</div><p class="small muted" style="margin-top:3px">Loads Geist, Geist Mono and nine Noto Sans scripts</p></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">components/ui.tsx</div><p class="small muted" style="margin-top:3px">TopBar, Card, Label, ListenButton, TickBox, MicFab</p></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">components/Onboarding.tsx</div><p class="small muted" style="margin-top:3px">OnboardingFrame, <code>glass</code> and <code>primaryBtn</code></p></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">components/SlideToConfirm.tsx</div><p class="small muted" style="margin-top:3px">Drag to mark doses taken</p></div>
+    <div style="padding:10px 0;border-bottom:1px solid var(--hair)"><div class="mono" style="font-size:11.5px">components/DeviceFrame.tsx</div><p class="small muted" style="margin-top:3px">iPhone mockup on screens 1024px and wider</p></div>
+  </div>
+
+  <div class="grid3" style="margin-top:24px">
+    <div class="card"><div class="glyph"><i></i><i></i><i></i><i></i></div><div class="label dot" style="margin-top:10px">Surfaces</div><p style="margin-top:8px">Each page is either night or paper. Shared components take a <code>dark</code> prop to match.</p></div>
+    <div class="card"><div class="glyph"><i></i><i></i><i></i><i></i></div><div class="label dot" style="margin-top:10px">Accessibility</div><p style="margin-top:8px">Large text lifts the root from 16px to 19px. Focus rings are peach. Motion stops for reduced-motion users.</p></div>
+    <div class="card dusk"><div class="glyph"><i></i><i></i><i></i><i></i></div><div class="label dot" style="margin-top:10px;color:rgba(255,255,255,0.75)">The rule on red</div><p style="margin-top:8px">Alert red means danger to the patient. Nothing else in the app is red.</p></div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>02 / 10</span></div>
+</section>
+
+<!-- ======================= 3. COLOUR ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>02</b> Colour</div></div>
+  <h1 class="t">Night to dusk, in ten tokens.</h1>
+  <p class="lead">The palette follows the hero gradient: cool night blue through teal into warm dusk. Two status colours sit outside that arc and are kept for meaning. Use them as Tailwind utilities with opacity modifiers, never as raw hex.</p>
+
+  <div class="label dot" style="margin-top:20px">Night tones · structure</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);margin-top:10px;border-radius:20px;overflow:hidden;height:96px">
+    <div style="background:#0B0F14;color:#fff;padding:14px 16px;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:15px">night</div><div class="mono" style="font-size:10.5px;opacity:0.6">#0B0F14</div></div>
+    <div style="background:#1C2A3A;color:#fff;padding:14px 16px;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:15px">slate</div><div class="mono" style="font-size:10.5px;opacity:0.6">#1C2A3A</div></div>
+    <div style="background:#3E5C66;color:#fff;padding:14px 16px;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:15px">teal</div><div class="mono" style="font-size:10.5px;opacity:0.6">#3E5C66</div></div>
+    <div style="background:#C9D1D6;padding:14px 16px;display:flex;flex-direction:column;justify-content:flex-end"><div style="font-size:15px">mist</div><div class="mono" style="font-size:10.5px;opacity:0.55">#C9D1D6</div></div>
+  </div>
+  <div class="grid4" style="gap:0;margin-top:9px">
+    <p class="small muted" style="padding-right:14px">App background, dark pages, slide track. Also <code>theme-color</code>.</p>
+    <p class="small muted" style="padding:0 14px">Gradient mid-tone and desktop backdrop glow.</p>
+    <p class="small muted" style="padding:0 14px">Brand cool accent: ambient blobs, the Ask orb, hero glow.</p>
+    <p class="small muted" style="padding-left:14px">Last stop of the hero gradient, where night meets paper.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:18px">
+    <div><div class="label dot">Dusk accents · warmth</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div><div style="height:58px;border-radius:16px;background:#E8B79A"></div><div style="font-size:13px;margin-top:7px">peach</div><div class="mono muted" style="font-size:10px">#E8B79A</div></div>
+        <div><div style="height:58px;border-radius:16px;background:#C98E8E"></div><div style="font-size:13px;margin-top:7px">rose</div><div class="mono muted" style="font-size:10px">#C98E8E</div></div>
+      </div><p class="small muted" style="margin-top:7px">Focus ring, eyebrow accents, warm blobs, dusk cards.</p></div>
+    <div><div class="label dot">Neutrals · reading</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div><div style="height:58px;border-radius:16px;background:#EEF1F3;box-shadow:inset 0 0 0 1px rgba(11,15,20,0.1)"></div><div style="font-size:13px;margin-top:7px">paper</div><div class="mono muted" style="font-size:10px">#EEF1F3</div></div>
+        <div><div style="height:58px;border-radius:16px;background:#0B0F14;display:grid;place-items:center;color:#fff;font-size:22px;font-weight:300">Aa</div><div style="font-size:13px;margin-top:7px">ink</div><div class="mono muted" style="font-size:10px">#0B0F14</div></div>
+      </div><p class="small muted" style="margin-top:7px">Plan, medicines and checklist sit on paper; text is ink.</p></div>
+    <div><div class="label dot">Status · meaning</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div><div style="height:58px;border-radius:16px;background:#E5484D;display:grid;place-items:center;color:#fff">{{i:triangle-alert:22}}</div><div style="font-size:13px;margin-top:7px">alert</div><div class="mono muted" style="font-size:10px">#E5484D</div></div>
+        <div><div style="height:58px;border-radius:16px;background:#5E9C7D;display:grid;place-items:center;color:#fff">{{i:check:22:2.4}}</div><div style="font-size:13px;margin-top:7px">sage</div><div class="mono muted" style="font-size:10px">#5E9C7D</div></div>
+      </div><p class="small muted" style="margin-top:7px">Red for danger signs and 108. Sage for doses taken.</p></div>
+  </div>
+
+  <div class="rule"></div>
+  <h2 class="s">Gradients</h2>
+  <div class="grid3">
+    <div><div style="height:70px;border-radius:18px;background:radial-gradient(120% 60% at 50% 0%, rgba(62,92,102,0.55) 0%, transparent 60%),linear-gradient(180deg,#0B0F14 0%,#1C2A3A 38%,#3E5C66 72%,#C9D1D6 100%)"></div><div class="mono" style="font-size:11px;margin-top:8px">.hero-gradient</div><p class="small muted">Night → slate → teal → mist, with a teal glow on top. Plan hero.</p></div>
+    <div><div style="height:70px;border-radius:18px;background:linear-gradient(160deg,#1C2A3A 0%,#3E5C66 35%,#C98E8E 80%,#E8B79A 100%)"></div><div class="mono" style="font-size:11px;margin-top:8px">.dusk-gradient</div><p class="small muted">Slate → teal → rose → peach at 160°. Follow-up card.</p></div>
+    <div><div style="height:70px;border-radius:18px;box-shadow:inset 0 0 0 1px rgba(11,15,20,0.08);background:radial-gradient(60% 40% at 100% 0%, rgba(232,183,154,0.5) 0%, transparent 70%),radial-gradient(55% 45% at 0% 60%, rgba(62,92,102,0.3) 0%, transparent 70%),radial-gradient(60% 40% at 100% 100%, rgba(201,142,142,0.35) 0%, transparent 70%),#EEF1F3"></div><div class="mono" style="font-size:11px;margin-top:8px">.bg-paper</div><p class="small muted">Paper with peach, teal and rose washes so glass has colour to blur.</p></div>
+  </div>
+
+  <div class="rule"></div>
+  <h2 class="s">Text opacity ladder</h2>
+  <div class="grid2">
+    <div class="card" style="padding:14px 18px">
+      <div style="display:grid;grid-template-columns:44px 1fr;row-gap:5px;align-items:baseline;font-size:13.5px">
+        <span class="mono muted" style="font-size:10.5px">100</span><span>Tab. Ecosprin 75mg <span class="muted small">· headings, key values</span></span>
+        <span class="mono muted" style="font-size:10.5px">70</span><span style="color:rgba(11,15,20,0.7)">Take one after breakfast <span class="small">· body</span></span>
+        <span class="mono muted" style="font-size:10.5px">55</span><span style="color:rgba(11,15,20,0.55)">From your paper, line 4 <span class="small">· secondary</span></span>
+        <span class="mono muted" style="font-size:10.5px">40</span><span style="color:rgba(11,15,20,0.4)">Medicines <span class="small">· hints, idle tabs</span></span>
+      </div>
+    </div>
+    <div class="card night" style="padding:14px 18px">
+      <div style="display:grid;grid-template-columns:44px 1fr;row-gap:5px;align-items:baseline;font-size:13.5px">
+        <span class="mono" style="font-size:10.5px;opacity:0.45">100</span><span>Your plan is ready <span class="small" style="opacity:0.5">· headings</span></span>
+        <span class="mono" style="font-size:10.5px;opacity:0.45">80</span><span style="color:rgba(255,255,255,0.8)">Every medicine, explained <span class="small">· body</span></span>
+        <span class="mono" style="font-size:10.5px;opacity:0.45">55</span><span style="color:rgba(255,255,255,0.55)">Nothing is stored <span class="small">· secondary</span></span>
+        <span class="mono" style="font-size:10.5px;opacity:0.45">45</span><span style="color:rgba(255,255,255,0.45)">Sarvam AI <span class="small">· labels, idle tabs</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>03 / 10</span></div>
+</section>
+
+<!-- ======================= 4. TYPOGRAPHY ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>03</b> Typography</div></div>
+  <h1 class="t">One family, set light.</h1>
+  <p class="lead">Geist carries the whole interface. Display sizes use weight 200 or 300, body text 400, and hierarchy comes from size rather than bold. Geist Mono appears only in small uppercase labels and drug names.</p>
+
+  <div style="display:grid;grid-template-columns:230px 1fr;gap:26px;margin-top:22px;align-items:stretch">
+    <div class="card night" style="padding:18px 22px;display:flex;flex-direction:column;justify-content:space-between;min-height:172px;position:relative;overflow:hidden">
+      <div class="blob" style="width:240px;height:240px;left:-40px;top:-140px;background:rgba(62,92,102,0.9);filter:blur(50px)"></div>
+      <div class="label" style="position:relative">Geist · 200</div>
+      <div style="font-size:104px;font-weight:200;letter-spacing:-0.05em;line-height:0.85;position:relative">Aa</div>
+    </div>
+    <div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair)">
+        <div style="padding:12px 0"><div style="font-size:30px;font-weight:200;letter-spacing:-0.03em">samjho</div><div class="label" style="margin-top:4px;letter-spacing:0.06em">200 Extralight</div><p class="small muted" style="margin-top:6px">Hero, stat numbers</p></div>
+        <div style="padding:12px 0"><div style="font-size:30px;font-weight:300;letter-spacing:-0.03em">samjho</div><div class="label" style="margin-top:4px;letter-spacing:0.06em">300 Light</div><p class="small muted" style="margin-top:6px">Titles, buttons, wordmark</p></div>
+        <div style="padding:12px 0"><div style="font-size:30px;font-weight:400;letter-spacing:-0.03em">samjho</div><div class="label" style="margin-top:4px;letter-spacing:0.06em">400 Regular</div><p class="small muted" style="margin-top:6px">Body, labels, tabs</p></div>
+        <div style="padding:12px 0"><div style="font-size:30px;font-weight:500;letter-spacing:-0.03em">samjho</div><div class="label" style="margin-top:4px;letter-spacing:0.06em">500 Medium</div><p class="small muted" style="margin-top:6px">Heaviest used: 108 button</p></div>
+      </div>
+      <div style="border-top:1px solid var(--hair);padding-top:14px;display:flex;gap:28px;align-items:flex-start">
+        <div><div class="mono" style="font-size:15px">TAB. ECOSPRIN 75MG</div><div class="label" style="margin-top:6px">Geist Mono · drug names</div></div>
+        <div><div class="label" style="color:var(--ink);font-size:10.9px">Morning · Day 3</div><div class="label" style="margin-top:6px">Geist Mono · eyebrow, 0.14em</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="s" style="margin-top:22px">Type scale</h2>
+  <table class="t tight" style="font-size:12px">
+    <tr><th>Specimen at actual size</th><th style="width:96px">Style</th><th style="width:72px">Size</th><th style="width:118px">Weight · leading</th><th style="width:132px">Used on</th></tr>
+    <tr><td style="font-size:48px;font-weight:200;line-height:1">4 <span style="font-size:15px;font-weight:400;color:rgba(11,15,20,0.7)">days</span></td><td>Stat</td><td class="mono">3rem</td><td>200 · none</td><td>Follow-up count</td></tr>
+    <tr><td style="font-size:35px;font-weight:200;letter-spacing:-0.025em;line-height:1.1">samjho</td><td>Hero</td><td class="mono">2.2rem</td><td>200 · tight</td><td>Welcome</td></tr>
+    <tr><td style="font-size:25.6px;font-weight:300;letter-spacing:-0.025em;line-height:1.3">6 medicines today</td><td>Plan title</td><td class="mono">1.6rem</td><td>300 · snug</td><td>Plan hero</td></tr>
+    <tr><td style="font-size:24px;font-weight:300;letter-spacing:-0.025em">Your medicines</td><td>Page title</td><td class="mono">1.5rem</td><td>300 · tight</td><td>Every page head</td></tr>
+    <tr><td style="font-size:20.8px;font-weight:300;line-height:1.35">What does Brilinta do?</td><td>Section</td><td class="mono">1.3rem</td><td>300–500 · snug</td><td>Ask answers, Reading</td></tr>
+    <tr><td style="font-size:15.2px">Take one tablet after breakfast.</td><td>Body L</td><td class="mono">0.95rem</td><td>400 · normal</td><td>Main copy, buttons</td></tr>
+    <tr><td style="font-size:13.6px">Keeps the stent open and stops clots.</td><td>Body</td><td class="mono">0.85rem</td><td>400 · normal</td><td>Card copy, rows</td></tr>
+    <tr><td style="font-size:12.5px;color:rgba(11,15,20,0.6)">Samjho explains your paper. It does not replace your doctor.</td><td>Small</td><td class="mono">0.78rem</td><td>400 · relaxed</td><td>Disclaimer, meta</td></tr>
+    <tr><td><span class="label" style="color:var(--ink);font-size:10.9px">Next check-up</span></td><td>Eyebrow</td><td class="mono">0.68rem</td><td>Mono · 0.14em</td><td><code>Label</code></td></tr>
+    <tr><td style="font-size:9.9px">Medicines</td><td>Tab</td><td class="mono">0.62rem</td><td>400</td><td>Bottom tab bar</td></tr>
+  </table>
+  <p class="small muted" style="margin-top:10px">All sizes are rem, so the Large text toggle (16px → 19px root) scales every row together.</p>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>04 / 10</span></div>
+</section>
+
+<!-- ======================= 5. SCRIPTS ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>03</b> Every script</div></div>
+  <h1 class="t">Eleven languages, one font stack.</h1>
+  <p class="lead">Hindi and Marathi share Devanagari, so eleven languages need ten scripts. Each Indic script falls through to its own Noto Sans family at weights 300–600, loaded with <code>display: swap</code> and not preloaded.</p>
+
+  <div class="grid4" style="margin-top:22px;gap:10px">
+    <div class="card" style="padding:14px 16px"><div lang="hi" style="font-size:24px;font-weight:300">नमस्ते</div><div style="font-size:13px;margin-top:6px">हिन्दी</div><div class="label" style="margin-top:4px">Hindi · Devanagari</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="mr" style="font-size:24px;font-weight:300">नमस्कार</div><div style="font-size:13px;margin-top:6px">मराठी</div><div class="label" style="margin-top:4px">Marathi · Devanagari</div></div>
+    <div class="card" style="padding:14px 16px"><div style="font-size:24px;font-weight:300">Namaste</div><div style="font-size:13px;margin-top:6px">English</div><div class="label" style="margin-top:4px">English · Geist</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="bn" style="font-size:24px;font-weight:300;font-family:'Noto Sans Bengali'">নমস্কার</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Bengali'">বাংলা</div><div class="label" style="margin-top:4px">Bengali · Bengali</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="gu" style="font-size:24px;font-weight:300;font-family:'Noto Sans Gujarati'">નમસ્તે</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Gujarati'">ગુજરાતી</div><div class="label" style="margin-top:4px">Gujarati · Gujarati</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="pa" style="font-size:24px;font-weight:300;font-family:'Noto Sans Gurmukhi'">ਸਤ ਸ੍ਰੀ ਅਕਾਲ</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Gurmukhi'">ਪੰਜਾਬੀ</div><div class="label" style="margin-top:4px">Punjabi · Gurmukhi</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="ta" style="font-size:24px;font-weight:300;font-family:'Noto Sans Tamil'">வணக்கம்</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Tamil'">தமிழ்</div><div class="label" style="margin-top:4px">Tamil · Tamil</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="te" style="font-size:24px;font-weight:300;font-family:'Noto Sans Telugu'">నమస్కారం</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Telugu'">తెలుగు</div><div class="label" style="margin-top:4px">Telugu · Telugu</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="kn" style="font-size:24px;font-weight:300;font-family:'Noto Sans Kannada'">ನಮಸ್ಕಾರ</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Kannada'">ಕನ್ನಡ</div><div class="label" style="margin-top:4px">Kannada · Kannada</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="ml" style="font-size:24px;font-weight:300;font-family:'Noto Sans Malayalam'">നമസ്കാരം</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Malayalam'">മലയാളം</div><div class="label" style="margin-top:4px">Malayalam · Malayalam</div></div>
+    <div class="card" style="padding:14px 16px"><div lang="or" style="font-size:24px;font-weight:300;font-family:'Noto Sans Oriya'">ନମସ୍କାର</div><div style="font-size:13px;margin-top:6px;font-family:'Noto Sans Oriya'">ଓଡ଼ିଆ</div><div class="label" style="margin-top:4px">Odia · Odia</div></div>
+    <div class="card dusk" style="padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-size:40px;font-weight:200;line-height:1">10</div><div class="label" style="color:rgba(255,255,255,0.8)">Scripts, one stack</div></div>
+  </div>
+
+  <h2 class="s" style="margin-top:28px">The fallback chain</h2>
+  <p class="small muted" style="margin-bottom:12px">The browser walks <code>--font-sans</code> left to right and uses the first family that has the glyph. <code>--font-mono</code> is the same chain with Geist Mono first.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px">
+    <span class="chip" style="background:var(--night);color:#fff">Geist</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Noto Devanagari</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Bengali</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Gujarati</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Gurmukhi</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Kannada</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Malayalam</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Oriya</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Tamil</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">Telugu</span>{{i:chevron-right:12}}
+    <span class="chip" style="background:rgba(11,15,20,0.06)">system-ui</span>
+  </div>
+
+  <div class="rule"></div>
+  <div class="grid2">
+    <div>
+      <h2 class="s">Track Latin only</h2>
+      <div class="card" style="padding:14px 18px">
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:var(--alert)">{{i:x:16:2}}</span><span class="mono" lang="hi" style="font-size:17px;letter-spacing:0.14em">स्टेंट खुला रखने</span></div>
+        <div style="height:1px;background:var(--hair);margin:10px 0"></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="color:var(--sage)">{{i:check:16:2}}</span><span class="mono" lang="hi" style="font-size:17px;letter-spacing:0">स्टेंट खुला रखने</span></div>
+      </div>
+      <p class="small muted" style="margin-top:9px">Letter-spacing pulls Indic conjuncts apart. When <code>lang</code> is not <code>en-IN</code>, <code>.font-mono</code> tracking is reset to 0.</p>
+    </div>
+    <div>
+      <h2 class="s">Large text</h2>
+      <div class="card" style="padding:14px 18px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:16px">Take one tablet after food</span><span class="label">16px</span></div>
+        <div style="height:1px;background:var(--hair);margin:10px 0"></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:19px">Take one tablet after food</span><span class="label">19px</span></div>
+      </div>
+      <p class="small muted" style="margin-top:9px">The <span style="display:inline-block;vertical-align:-3px">{{i:type:14}}</span> button in TopBar sets <code>html[data-large="1"]</code>, raising the root to 19px.</p>
+    </div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>05 / 10</span></div>
+</section>
+
+<!-- ======================= 6. LAYOUT & SURFACES ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>04</b> Layout and surfaces</div></div>
+  <h1 class="t">A 440px column of glass.</h1>
+  <p class="lead">Everything lives in one centred column, capped at 440px. Shapes are pills and large-radius cards; depth comes from translucent white over soft colour, not from heavy shadows.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:22px">
+    <div>
+      <h2 class="s">Spacing</h2>
+      <div style="display:grid;grid-template-columns:62px 1fr 120px;row-gap:9px;align-items:center;font-size:12px">
+        <span class="mono muted">4px</span><span><i style="display:block;width:4px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted">Icon to label</span>
+        <span class="mono muted">8px</span><span><i style="display:block;width:8px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted"><code>gap-2</code> default</span>
+        <span class="mono muted">12px</span><span><i style="display:block;width:12px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted"><code>gap-3</code> rows</span>
+        <span class="mono muted">16px</span><span><i style="display:block;width:16px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted">Gutter, card stack</span>
+        <span class="mono muted">20px</span><span><i style="display:block;width:20px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted">Card padding</span>
+        <span class="mono muted">32px</span><span><i style="display:block;width:32px;height:10px;background:var(--teal);border-radius:2px"></i></span><span class="muted">Section break</span>
+        <span class="mono muted">128px</span><span><i style="display:block;width:128px;height:10px;background:var(--peach);border-radius:2px"></i></span><span class="muted">Clears the tab bar</span>
+      </div>
+    </div>
+    <div>
+      <h2 class="s">Corner radius</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div><div style="height:38px;border-radius:99px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">full</div><div class="small muted">Buttons, pills</div></div>
+        <div><div style="height:38px;border-radius:30px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">30px</div><div class="small muted">Tab bar</div></div>
+        <div><div style="height:38px;border-radius:28px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">28px</div><div class="small muted">Card</div></div>
+        <div><div style="height:38px;border-radius:24px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">24px</div><div class="small muted">Panels</div></div>
+        <div><div style="height:38px;border-radius:22px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">22px</div><div class="small muted">Tiles, photos</div></div>
+        <div><div style="height:38px;border-radius:16px;background:#fff;box-shadow:0 0 0 1px var(--hair)"></div><div class="mono" style="font-size:10.5px;margin-top:6px">16px</div><div class="small muted">Language tiles</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+  <h2 class="s">Glass surfaces</h2>
+  <div class="grid2">
+    <div class="spec">
+      <div class="stage w" style="flex-direction:column;align-items:stretch;padding:16px">
+        <div class="appcard" style="padding:16px"><div class="label">Card · light</div><p style="font-size:13.6px;margin-top:6px">White 65%, white ring 80%, blur-xl, soft ink shadow.</p></div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <div style="flex:1;height:44px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,0.85),rgba(255,255,255,0.55));box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(255,255,255,0.55),0 14px 30px -14px rgba(11,15,20,0.35);display:grid;place-items:center" class="mono"><span style="font-size:10px">.glass-light</span></div>
+          <div style="flex:1;height:44px;border-radius:22px;background:rgba(255,255,255,0.7);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(11,15,20,0.05),0 4px 12px -6px rgba(11,15,20,0.25);display:grid;place-items:center" class="mono"><span style="font-size:10px">.glass-pill-light</span></div>
+        </div>
+      </div>
+      <div class="meta"><b>On paper</b><span>.bg-paper</span></div>
+    </div>
+    <div class="spec">
+      <div class="stage n on-dark" style="flex-direction:column;align-items:stretch;padding:16px">
+        <div class="appcard d" style="padding:16px"><div class="label">Card · dark</div><p style="font-size:13.6px;margin-top:6px;color:rgba(255,255,255,0.8)">White 6%, white ring 12%, blur-xl.</p></div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <div style="flex:1;height:44px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.05)),rgba(11,15,20,0.35);box-shadow:inset 0 1px 0 rgba(255,255,255,0.28),0 0 0 1px rgba(255,255,255,0.1);display:grid;place-items:center" class="mono"><span style="font-size:10px">.glass-dark</span></div>
+          <div style="width:44px;height:44px;border-radius:99px" class="orb">{{i:audio-lines:18}}</div>
+          <div style="flex:1;height:44px;border-radius:22px;background:rgba(255,255,255,0.12);box-shadow:inset 0 1px 0 rgba(255,255,255,0.22);display:grid;place-items:center" class="mono"><span style="font-size:10px">.glass-pill-dark</span></div>
+        </div>
+      </div>
+      <div class="meta"><b>On night</b><span>bg-night + teal blob</span></div>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:10px">Glass needs colour behind it. On light pages that is the <code>.bg-paper</code> wash; on dark pages it is a blurred teal or rose blob. The orb uses <code>.glass-orb</code>: a radial teal → slate → night with an inner shine.</p>
+
+  <div class="rule"></div>
+  <h2 class="s">Breakpoints</h2>
+  <table class="t tight">
+    <tr><th style="width:200px">Viewport</th><th>Behaviour</th></tr>
+    <tr><td>Under 640px</td><td>The plain app on a night background; the phone is the device</td></tr>
+    <tr><td>640px and wider</td><td>Slate and teal radial glows appear behind the 440px column</td></tr>
+    <tr><td>1024px wide and 600px tall</td><td>The app renders inside an iPhone mockup (393 × 852 screen), scaled to fit. /sample-paper is exempt</td></tr>
+    <tr><td>Print</td><td>White background, 13px root, <code>.no-print</code> hidden and <code>.print-only</code> shown</td></tr>
+  </table>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>06 / 10</span></div>
+</section>
+
+<!-- ======================= 7. CONTROLS ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>05</b> Controls</div></div>
+  <h1 class="t">Small set, two skins.</h1>
+  <p class="lead">Every shared control has a light and a dark version, picked with a <code>dark</code> prop. All are shown at actual app size. Tap targets are at least 40px.</p>
+
+  <div class="spec" style="margin-top:18px;display:grid;grid-template-columns:433px 1fr">
+    <div class="stage w" style="flex-direction:column;align-items:flex-start;gap:10px">
+      <div class="topbar d"><span class="wmk">samjho</span><span style="display:flex;align-items:center;gap:4px"><span class="pill-btn langpill d">{{i:languages:14}}हिन्दी</span><span class="iconbtn d">{{i:volume-2:18}}</span><span class="iconbtn d">{{i:type:18}}</span><span class="iconbtn d">{{i:info:18}}</span></span></div>
+      <div class="topbar l"><span class="iconbtn" style="margin-left:-8px">{{i:arrow-left:20}}</span><span style="display:flex;align-items:center;gap:4px"><span class="pill-btn langpill">{{i:languages:14}}English</span><span class="iconbtn">{{i:volume-x:18}}</span><span class="iconbtn" style="background:rgba(11,15,20,0.1)">{{i:type:18}}</span><span class="iconbtn">{{i:info:18}}</span></span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:space-between;padding:16px 18px;border-left:1px solid var(--hair)">
+      <div><div style="font-size:13px">TopBar</div><div class="mono" style="font-size:10px;color:rgba(11,15,20,0.45);margin-top:2px">components/ui.tsx</div></div>
+      <p style="font-size:11.5px;line-height:1.5;color:rgba(11,15,20,0.6)">Sticky, blurred night/60 or paper/80. Wordmark or back arrow left; language, mute, large text and info right. Shown: dark home; light with back, muted, large text on.</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="spec">
+      <div class="stage n on-dark" style="flex-direction:column;align-items:stretch;gap:10px">
+        <span class="pill-btn btn-primary">Get started {{i:arrow-right:18}}</span>
+        <div style="display:flex;gap:8px"><span class="pill-btn btn-white">{{i:check:16}} English</span><span class="pill-btn btn-ring">{{i:external-link:14}} View sample paper</span></div>
+      </div>
+      <div class="meta"><b>Buttons on night</b><span>Onboarding.tsx</span></div>
+      <p class="note"><code>primaryBtn</code>: 56px glass pill, light 0.95rem. Solid white for selected, ring-only for minor actions.</p>
+    </div>
+    <div class="spec">
+      <div class="stage w" style="flex-direction:column;align-items:stretch;gap:10px">
+        <div style="display:flex;gap:8px"><span class="pill-btn btn-alert">{{i:phone:16}} Call 108</span><span class="pill-btn btn-white" style="box-shadow:inset 0 0 0 1px var(--hair)">{{i:calendar-plus:16}} Add to calendar</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><span class="tile" style="background:#25D366;color:#fff">{{i:share-2:20}} Share</span><span class="tile" style="background:#fff;box-shadow:inset 0 0 0 1px var(--hair)">{{i:printer:20}} Print</span></div>
+      </div>
+      <div class="meta"><b>Buttons on paper</b><span>app/plan</span></div>
+      <p class="note">Danger is the only filled colour button. Share uses WhatsApp green #25D366 by design.</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="spec">
+      <div class="stage w"><span class="pill-btn listen">{{i:volume-2:16}} Listen</span><span class="pill-btn listen">{{i:square:14:2}} Stop</span><span class="pill-btn listen" style="opacity:0.85">{{i:loader-circle:16}} Listen</span></div>
+      <div class="meta"><b>ListenButton</b><span>ui.tsx</span></div>
+      <p class="note">Idle, playing, loading. 40px pill (48px with <code>big</code>). Reads the card aloud through Sarvam TTS.</p>
+    </div>
+    <div class="spec">
+      <div class="stage n on-dark"><span class="pill-btn listen d big">{{i:volume-2:16}} Listen to everything</span><span class="pill-btn langpill d">{{i:languages:14}}தமிழ்</span></div>
+      <div class="meta"><b>Listen big · LanguagePill</b><span>ui.tsx</span></div>
+      <p class="note">On dark pages both switch to white/10 fill with a white/15 ring. The pill lists each language in its own script.</p>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-top:14px">
+    <div class="spec">
+      <div class="stage w" style="justify-content:center"><span class="tick"></span><span class="tick on">{{i:check:16:3}}</span></div>
+      <div class="meta"><b>TickBox</b><span>ui.tsx</span></div>
+      <p class="note">28px circle; checked is sage.</p>
+    </div>
+    <div class="spec">
+      <div class="stage w" style="flex-direction:column;align-items:flex-start;justify-content:center;gap:6px"><span class="label" style="color:var(--ink)">Morning · Day 3</span><span class="label" style="color:var(--peach);background:var(--night);padding:3px 7px;border-radius:6px">Next check-up</span></div>
+      <div class="meta"><b>Label</b><span>ui.tsx</span></div>
+      <p class="note">Mono 0.68rem, uppercase, 0.14em.</p>
+    </div>
+    <div class="spec">
+      <div class="stage n" style="justify-content:center"><span class="dots"><i class="on"></i><i></i><i></i></span><span class="dots"><i></i><i class="on"></i><i></i></span></div>
+      <div class="meta"><b>Step dots</b><span>Onboarding.tsx</span></div>
+      <p class="note">Active step stretches to 24px.</p>
+    </div>
+  </div>
+
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>07 / 10</span></div>
+</section>
+
+<!-- ======================= 8. CONTAINERS & NAV ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>05</b> Containers</div></div>
+  <h1 class="t">Cards hold the plan.</h1>
+  <p class="lead">Content is grouped into 28px cards that fade up as they scroll into view. Status lives inside them: red for danger, dusk for what comes next, sage for done.</p>
+
+  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin-top:20px">
+    <div class="spec">
+      <div class="stage w" style="display:block;padding:16px">
+        <div class="appcard">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span class="label">Today · Day 3</span><span style="font-size:13px;color:rgba(11,15,20,0.7);display:flex;align-items:center;gap:2px">Medicines {{i:chevron-right:16}}</span></div>
+          <div style="font-size:17px;font-weight:300;margin:14px 0 10px;display:flex;align-items:center;gap:8px">{{i:sunrise:18}} Morning</div>
+          <div style="display:flex;gap:12px;align-items:center;padding:6px 0"><span class="tick on">{{i:check:16:3}}</span><div><div class="mono" style="font-size:13px">TAB. ECOSPRIN 75MG</div><div style="font-size:12.5px;color:rgba(11,15,20,0.6)">Keeps the stent open, stops clots</div></div></div>
+          <div style="display:flex;gap:12px;align-items:center;padding:6px 0"><span class="tick"></span><div><div class="mono" style="font-size:13px">TAB. TELMA 40MG</div><div style="font-size:12.5px;color:rgba(11,15,20,0.6)">For blood pressure</div></div></div>
+          <div style="margin-top:12px"><span class="pill-btn listen">{{i:volume-2:16}} Listen</span></div>
+        </div>
+      </div>
+      <div class="meta"><b>Card</b><span>ui.tsx · fades up 14px, 450ms</span></div>
+          </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="spec">
+        <div class="stage w" style="display:block;padding:12px">
+          <div class="appcard" style="box-shadow:0 0 0 2px rgba(229,72,77,0.7),0 10px 30px -14px rgba(11,15,20,0.18);padding:16px">
+            <div style="color:var(--alert);display:flex;gap:8px;align-items:center;font-size:14px">{{i:triangle-alert:18}} Go to hospital immediately if</div>
+            <div style="font-size:12.5px;margin-top:8px;line-height:1.7;color:rgba(11,15,20,0.75)"><span style="display:inline-block;width:7px;height:7px;border-radius:9px;background:var(--alert);margin-right:8px"></span>Chest pain or pressure<br><span style="display:inline-block;width:7px;height:7px;border-radius:9px;background:var(--alert);margin-right:8px"></span>Breathless at rest</div>
+            <span class="pill-btn btn-alert" style="margin-top:10px;height:40px;font-size:13px">{{i:phone:15}} Call 108</span>
+          </div>
+        </div>
+        <div class="meta"><b>Danger card</b><span>app/plan</span></div>
+      </div>
+      <div class="spec">
+        <div class="stage w" style="display:block;padding:12px">
+          <div class="appcard" style="background:linear-gradient(160deg,#1C2A3A 0%,#3E5C66 35%,#C98E8E 80%,#E8B79A 100%);color:#fff;box-shadow:none;padding:16px">
+            <div class="label" style="color:rgba(255,255,255,0.75)">Next check-up</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-top:6px"><span style="font-size:48px;font-weight:200;line-height:1">4</span><span style="font-size:15px;color:rgba(255,255,255,0.85)">days</span></div>
+            <div style="font-size:12.5px;margin-top:6px;color:rgba(255,255,255,0.8)">Cardio OPD · CBC, lipid profile</div>
+          </div>
+        </div>
+        <div class="meta"><b>Follow-up card</b><span>.dusk-gradient</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="spec">
+      <div class="stage w" style="display:block;padding:16px">
+        <div style="display:flex;gap:12px;align-items:flex-start;border-radius:24px;background:rgba(255,255,255,0.6);box-shadow:0 0 0 1px rgba(255,255,255,0.8);padding:14px"><span style="color:#C2410C">{{i:lightbulb:18}}</span><div><div style="font-size:14px">Your plan is ready</div><div style="font-size:12px;color:rgba(11,15,20,0.6);margin-top:3px;line-height:1.5">Tap Listen to hear any card. Tick doses as you take them.</div></div></div>
+      </div>
+      <div class="meta"><b>Info strip</b><span>plan, scan</span></div>
+    </div>
+    <div class="spec">
+      <div class="stage w" style="display:block;padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;font-size:12.5px"><span>3 of 5 done</span><span class="mono muted">60%</span></div>
+        <div style="height:8px;border-radius:99px;background:rgba(11,15,20,0.07);margin-top:8px"><div style="width:60%;height:100%;border-radius:99px;background:var(--sage)"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+          <div style="height:44px;border-radius:16px;background:var(--night);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:13px">हिन्दी {{i:check:14}}</div>
+          <div style="height:44px;border-radius:16px;background:rgba(11,15,20,0.06);display:flex;align-items:center;padding:0 12px;font-size:13px">ગુજરાતી</div>
+        </div>
+      </div>
+      <div class="meta"><b>Progress · Language tiles</b><span>checklist, language</span></div>
+    </div>
+  </div>
+
+  <div class="spec" style="margin-top:14px">
+    <div class="stage w" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="slide"><span class="thumb">{{i:arrow-right:20}}</span>Slide to mark morning doses taken</div>
+      <div class="slide done">{{i:check:20}} Morning doses taken</div>
+    </div>
+    <div class="meta"><b>SlideToConfirm</b><span>components/SlideToConfirm.tsx</span></div>
+    <p class="note">64px night track, 56px white thumb. Past 75% confirms; otherwise it springs back. Done turns sage.</p>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>08 / 10</span></div>
+</section>
+
+<!-- ======================= 9. IN CONTEXT ======================= -->
+<section class="page dark">
+  <div class="blob" style="width:560px;height:560px;left:-160px;top:-260px;background:rgba(62,92,102,0.7)"></div>
+  <div class="blob" style="width:420px;height:420px;right:-160px;bottom:80px;background:rgba(201,142,142,0.3)"></div>
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>06</b> Navigation and context</div></div>
+  <div style="position:relative;z-index:1">
+    <h1 class="t">One tab bar, the same parts on every screen.</h1>
+    <p class="lead" style="color:rgba(255,255,255,0.65)">A floating glass tab bar keeps the five main places and the voice button one tap away. Onboarding runs on night; reading pages run on paper with a night hero.</p>
+    <div class="spec dk" style="margin-top:22px">
+      <div class="stage w" style="display:grid;grid-template-columns:1fr;justify-items:center;padding:40px 18px 14px;gap:40px;background:radial-gradient(70% 90% at 100% 0%, rgba(232,183,154,0.35), transparent 70%), radial-gradient(60% 90% at 0% 100%, rgba(62,92,102,0.22), transparent 70%), linear-gradient(180deg, var(--paper) 0 50%, var(--night) 50% 100%)">
+        <div class="tabbar l">
+          <span class="tab on">{{i:house:20:2}}Plan</span><span class="tab">{{i:pill:20}}Medicines</span>
+          <span class="ask"><span class="ring"><span class="orb">{{i:audio-lines:22}}</span></span>Ask</span>
+          <span class="tab">{{i:square-check:20}}Checklist</span><span class="tab">{{i:camera:20}}Take photo</span>
+        </div>
+        <div class="tabbar d">
+          <span class="tab">{{i:house:20}}Plan</span><span class="tab on">{{i:pill:20:2}}Medicines</span>
+          <span class="ask"><span class="ring"><span class="orb">{{i:audio-lines:22}}</span></span>Ask</span>
+          <span class="tab">{{i:square-check:20}}Checklist</span><span class="tab">{{i:camera:20}}Take photo</span>
+        </div>
+      </div>
+      <div class="meta"><b>MicFab · bottom tab bar</b><span>components/ui.tsx</span></div>
+      <p class="note">68px <code>.glass-light</code> / <code>.glass-dark</code> bar, 30px radius. Active tab sits in a glass pill; Ask is a raised 58px ring around <code>.glass-orb</code>.</p>
+    </div>
+    <div class="grid4" style="margin-top:22px;gap:14px;padding:0 34px">
+      <figure style="margin:0"><div class="phone"><img src="assets/language.jpg"></div><figcaption class="label" style="margin-top:9px">Language · night</figcaption></figure>
+      <figure style="margin:0"><div class="phone"><img src="assets/guide.jpg"></div><figcaption class="label" style="margin-top:9px">Guide · night</figcaption></figure>
+      <figure style="margin:0"><div class="phone"><img src="assets/scan.jpg"></div><figcaption class="label" style="margin-top:9px">Scan · paper</figcaption></figure>
+      <figure style="margin:0"><div class="phone"><img src="assets/checklist.jpg"></div><figcaption class="label" style="margin-top:9px">Checklist · paper</figcaption></figure>
+    </div>
+    <div class="grid3" style="margin-top:22px">
+      <div class="card glassd"><div class="label dot">Night pages</div><p style="margin-top:8px">Welcome, Language, Guide, Ask. Teal and rose blobs drift behind glass panels.</p></div>
+      <div class="card glassd"><div class="label dot">Paper pages</div><p style="margin-top:8px">Plan, Medicines, Checklist, Scan. A night hero melts into paper via <code>.hero-gradient</code>.</p></div>
+      <div class="card dusk"><div class="label dot" style="color:rgba(255,255,255,0.8)">Shared</div><p style="margin-top:8px">TopBar, Card, ListenButton, TickBox and the tab bar, switched with one <code>dark</code> prop.</p></div>
+    </div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>09 / 10</span></div>
+</section>
+
+<!-- ======================= 10. ICONS, MOTION, RULES ======================= -->
+<section class="page">
+  <div class="run-h"><div class="wm">samjho</div><div class="sec"><b>07</b> Icons, motion and rules</div></div>
+  <h1 class="t">Thin lines, slow easing, few exceptions.</h1>
+  <p class="lead">Icons are Lucide at a 1.6 stroke, so they sit as lightly as the type. Motion is eased out and gentle, and switches off entirely when the system asks for reduced motion.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:20px">
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:camera:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Camera</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:volume-2:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Volume2</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:pill:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Pill</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:square-check:22}}<div class="small muted" style="font-size:10px;margin-top:5px">CheckSquare</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:house:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Home</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:languages:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Languages</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:phone:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Phone</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px;color:var(--alert)">{{i:triangle-alert:22}}<div class="small" style="font-size:10px;margin-top:5px">Alert</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:sunrise:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Sunrise</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:sun:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Sun</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:sunset:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Sunset</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:moon:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Moon</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:message-circle:22}}<div class="small muted" style="font-size:10px;margin-top:5px">Message</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:shield-check:22}}<div class="small muted" style="font-size:10px;margin-top:5px">ShieldCheck</div></div>
+    <div class="card" style="padding:10px 0 7px;text-align:center;border-radius:16px;color:var(--peach)">{{i:sparkles:22}}<div class="small" style="font-size:10px;margin-top:5px;color:rgba(11,15,20,0.55)">Sparkles</div></div>
+    <div class="card night" style="padding:10px 0 7px;text-align:center;border-radius:16px">{{i:audio-lines:22:1.8}}<div class="small" style="font-size:10px;margin-top:5px;opacity:0.6">Waveform*</div></div>
+  </div>
+  <p class="small muted" style="margin-top:8px">16px inline · 18px in headers · 20px in the tab bar · 22–24px in the orb. Stroke 1.6, 2 for the active tab, 3 for the TickBox check. *Waveform is a custom three-bar SVG in ui.tsx.</p>
+
+  <div class="rule"></div>
+  <div style="display:grid;grid-template-columns:210px 1fr;gap:24px;align-items:start">
+    <div class="card night" style="padding:16px 18px">
+      <div class="label">Card ease</div>
+      <svg width="174" height="120" viewBox="0 0 174 120" style="margin-top:10px;display:block">
+        <rect x="0.5" y="0.5" width="173" height="119" rx="10" fill="none" stroke="rgba(255,255,255,0.1)"/>
+        <path d="M10 110 L164 10" stroke="rgba(255,255,255,0.15)" stroke-dasharray="3 4"/>
+        <path d="M10 110 C 43.9 110, 164 10, 164 10" transform="" fill="none"/>
+        <path d="M10 110 C 43.88 110, 65.44 10, 164 10" fill="none" stroke="#E8B79A" stroke-width="2"/>
+        <circle cx="10" cy="110" r="3" fill="#fff"/><circle cx="164" cy="10" r="3" fill="#fff"/>
+      </svg>
+      <div class="mono" style="font-size:10.5px;margin-top:10px;color:rgba(255,255,255,0.7)">cubic-bezier(0.22, 1, 0.36, 1)</div>
+      <div style="font-size:12px;margin-top:3px;color:rgba(255,255,255,0.55)">Fast start, long soft landing.</div>
+    </div>
+    <table class="t tight" style="font-size:12px">
+      <tr><th style="width:110px">Motion</th><th>Spec</th><th style="width:120px">Where</th></tr>
+      <tr><td>Card reveal</td><td>Opacity 0 → 1, y 14 → 0, 450ms, once in view</td><td><code>Card</code></td></tr>
+      <tr><td>Page intro</td><td>Fade and rise 10–16px over 600–800ms; list items 100ms apart</td><td>Onboarding</td></tr>
+      <tr><td><code>drift</code></td><td>14s loop, translate ±6%, scale 1 → 1.12</td><td>Ambient blobs</td></tr>
+      <tr><td><code>breathe</code></td><td>1.6s pulse, scale 1 → 1.35 while fading out</td><td>Listening ring</td></tr>
+      <tr><td>Tick</td><td>Spring, stiffness 500, damping 18</td><td><code>TickBox</code></td></tr>
+      <tr><td>Press</td><td><code>active:scale-95</code>, 0.97 on tiles, 0.98 on wide buttons</td><td>All buttons</td></tr>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+  <div class="grid2">
+    <div class="card" style="padding:18px 20px">
+      <div style="display:flex;align-items:center;gap:8px;color:var(--sage)">{{i:check:16:2.4}}<span class="label" style="color:var(--sage)">Do</span></div>
+      <ul style="margin:10px 0 0;padding:0;list-style:none;font-size:12.5px;line-height:1.45;display:grid;gap:5px">
+        <li>Use tokens (<code>bg-night</code>, <code>text-ink/70</code>), never raw hex.</li>
+        <li>Size text in rem so Large text scales it.</li>
+        <li>Pick night or paper per page and pass <code>dark</code> to match.</li>
+        <li>Keep red for danger and sage for done.</li>
+        <li>Label every icon-only button; keep targets 40px or more.</li>
+        <li>Test new copy in a long Indic language.</li>
+      </ul>
+    </div>
+    <div class="card" style="padding:18px 20px">
+      <div style="display:flex;align-items:center;gap:8px;color:var(--alert)">{{i:x:16:2.4}}<span class="label" style="color:var(--alert)">Don't</span></div>
+      <ul style="margin:10px 0 0;padding:0;list-style:none;font-size:12.5px;line-height:1.45;display:grid;gap:5px">
+        <li>Add letter-spacing to text that may render in Indic.</li>
+        <li>Use bold for hierarchy. Use size and light weights.</li>
+        <li>Put glass on a flat colour; it needs a wash or blob behind it.</li>
+        <li>Invent new radii beyond full, 30, 28, 24, 22 and 16px.</li>
+        <li>Carry meaning in motion; it is off for reduced-motion users.</li>
+        <li>Remove the peach <code>:focus-visible</code> ring.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="run-f"><span>Samjho design system · v1 · November 2026</span><span>10 / 10</span></div>
+</section>
+
+</body>
+</html>
