@@ -1,0 +1,29 @@
+{
+  "name": "samjho",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "framer-motion": "^14.9.0",
+    "lucide-react": "^1.66.0",
+    "next": "^16.4.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sarvamai": "^1.1.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4.3.3",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}
