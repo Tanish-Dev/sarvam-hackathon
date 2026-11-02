@@ -68,13 +68,26 @@ export async function parseStatus(jobId: string) {
 }
 
 export async function parseMarkdown(jobId: string) {
-  const res = await sdk(() => client().docAi.getResults(jobId, { format: "md" }, { timeoutInSeconds: 40 }));
-  if (res.type !== "parse") return "";
-  return res.documents
+  // Jobs may produce HTML only ("job produced html, cannot serve md"), so ask for HTML and flatten it.
+  const res = await sdk(() => client().docAi.getResults(jobId, { format: "html" }, { timeoutInSeconds: 40 }));
+  const docs = ((res as { documents?: { pages?: { page_number?: number; content?: string }[] }[] }).documents) ?? [];
+  return docs
     .flatMap((d) => d.pages ?? [])
     .sort((a, b) => (a.page_number ?? 0) - (b.page_number ?? 0))
-    .map((p) => p.content ?? "")
+    .map((p) => htmlToText(p.content ?? ""))
     .join("\n\n")
+    .trim();
+}
+
+function htmlToText(html: string) {
+  return html
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, "")
+    .replace(/<\/(td|th)>/gi, " | ")
+    .replace(/<(br|\/p|\/div|\/tr|\/li|\/h\d)[^>]*>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n\s*\n+/g, "\n")
     .trim();
 }
 
