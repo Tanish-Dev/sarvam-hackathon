@@ -86,8 +86,8 @@ export default function Ask() {
       <div className="relative flex min-h-[calc(100dvh-64px)] flex-col px-6 pb-[max(env(safe-area-inset-bottom),18px)]">
         {emergency && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} role="alert" className="mt-2 rounded-[22px] bg-alert p-4 text-white shadow-xl">
-            <p className="font-semibold leading-snug">{t.emergency}</p>
-            <a href="tel:108" className="mt-3 flex h-14 items-center justify-center gap-2 rounded-full bg-white text-[1.05rem] font-bold text-alert"><Phone className="size-5" /> {t.call108}</a>
+            <p className="font-medium leading-snug">{t.emergency}</p>
+            <a href="tel:108" className="mt-3 flex h-14 items-center justify-center gap-2 rounded-full bg-white text-[0.95rem] font-normal text-alert"><Phone className="size-5" /> {t.call108}</a>
           </motion.div>
         )}
 

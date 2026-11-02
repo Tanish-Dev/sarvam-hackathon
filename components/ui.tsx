@@ -19,7 +19,7 @@ export function ListenButton({ id, text, label, dark, big }: { id: string; text:
       type="button"
       aria-label={active ? t.stop : `${t.listen}${label ? `: ${label}` : ""}`}
       onClick={(e) => { e.stopPropagation(); unlockAudio(); if (active) stopAudio(); else void speak(id, text, lang); }}
-      className={`inline-flex shrink-0 items-center gap-2 rounded-full ${big ? "h-12 px-5" : "h-10 px-4"} text-[0.8rem] font-medium transition active:scale-95 ${
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full ${big ? "h-12 px-5" : "h-10 px-4"} text-[0.8rem] font-normal transition active:scale-95 ${
         dark ? "bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10 hover:bg-ink/10"
       }`}
     >
@@ -38,7 +38,7 @@ export function Card({ children, className = "", dark }: { children: React.React
     <motion.section
       initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className={`rounded-[28px] p-5 ${dark ? "bg-night text-white ring-1 ring-white/10" : "bg-white text-ink shadow-[0_1px_0_rgba(11,15,20,0.04),0_10px_30px_-12px_rgba(11,15,20,0.18)]"} ${className}`}
+      className={`rounded-[28px] p-5 ${dark ? "bg-white/[0.06] text-white ring-1 ring-white/12 backdrop-blur-xl" : "bg-white/65 text-ink ring-1 ring-white/80 backdrop-blur-xl shadow-[0_10px_30px_-14px_rgba(11,15,20,0.18)]"} ${className}`}
     >
       {children}
     </motion.section>
@@ -101,7 +101,7 @@ export function Disclaimer({ dark }: { dark?: boolean }) {
 export function TickBox({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
     <button type="button" role="checkbox" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)}
-      className={`grid size-8 shrink-0 place-items-center rounded-full ring-1 transition ${checked ? "bg-sage text-white ring-sage" : "bg-white ring-ink/20"}`}>
+      className={`grid size-7 shrink-0 place-items-center rounded-full ring-1 transition ${checked ? "bg-sage text-white ring-sage" : "bg-white/70 ring-ink/15"}`}>
       {checked && (
         <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 18 }}>
           <Check className="size-4" strokeWidth={3} />
@@ -124,13 +124,13 @@ export function MicFab({ onClick, label }: { onClick: () => void; label: string 
   ];
   return (
     <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(env(safe-area-inset-bottom),10px)]">
-      <div className="flex h-[68px] items-center justify-around rounded-[26px] bg-white/95 px-1 shadow-[0_12px_40px_-10px_rgba(11,15,20,0.45)] ring-1 ring-ink/5 backdrop-blur-xl">
+      <div className="flex h-[68px] items-center justify-around rounded-[26px] bg-white/70 px-1 shadow-[0_12px_40px_-12px_rgba(11,15,20,0.4)] ring-1 ring-white/70 backdrop-blur-2xl">
         {tabs.map((tab, i) => {
           if (!tab) {
             return (
               <button key="ask" onClick={onClick} aria-label={label} className="-mt-8 flex flex-col items-center gap-1">
-                <span className="grid size-14 place-items-center rounded-full bg-night text-white shadow-lg ring-4 ring-paper transition active:scale-95"><Waveform className="size-6" /></span>
-                <span className="text-[0.62rem] font-medium text-ink">{t.navAsk}</span>
+                <span className="grid size-14 place-items-center rounded-full bg-night text-white shadow-lg ring-4 ring-white/70 transition active:scale-95"><Waveform className="size-6" /></span>
+                <span className="text-[0.62rem] font-normal text-ink">{t.navAsk}</span>
               </button>
             );
           }
@@ -140,7 +140,7 @@ export function MicFab({ onClick, label }: { onClick: () => void; label: string 
             <Link key={i} href={tab.href} aria-current={on ? "page" : undefined}
               className={`flex min-w-14 flex-col items-center gap-1 rounded-2xl px-2 py-1.5 transition ${on ? "text-ink" : "text-ink/45"}`}>
               <Icon className="size-5" strokeWidth={on ? 2 : 1.6} />
-              <span className="max-w-16 truncate text-[0.62rem] font-medium">{tab.label}</span>
+              <span className="max-w-16 truncate text-[0.62rem] font-normal">{tab.label}</span>
             </Link>
           );
         })}

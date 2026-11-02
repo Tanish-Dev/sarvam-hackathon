@@ -53,3 +53,11 @@ button.bg-white, a.bg-white, button[class*="bg-white "], a[class*="bg-white "] {
 
 /* Letter-spacing breaks Indic conjuncts — only track Latin labels */
 html:not([lang="en-IN"]) .font-mono { letter-spacing: 0 !important; }
+
+/* Soft colour field behind light sections so glass cards have something to blur */
+.bg-paper {
+  background-image:
+    radial-gradient(60% 40% at 100% 0%, rgba(232, 183, 154, 0.28) 0%, transparent 70%),
+    radial-gradient(55% 35% at 0% 45%, rgba(62, 92, 102, 0.18) 0%, transparent 70%),
+    radial-gradient(60% 40% at 100% 90%, rgba(201, 142, 142, 0.18) 0%, transparent 70%);
+}

@@ -69,7 +69,7 @@ export default function Medicines() {
                           <div className="col-span-2"><dt><Label className="text-white/50">{t.timing}</Label></dt>
                             <dd className="mt-1">{m.duration_days ? fill(t.daysLeft, { n: m.duration_days }) : t.continueUntil}</dd></div>
                         </dl>
-                        {m.special_instructions && <p className="text-[0.95rem] leading-snug"><b>{t.specialInstructions}:</b> {m.special_instructions}</p>}
+                        {m.special_instructions && <p className="text-[0.95rem] leading-snug"><span className="text-white/60">{t.specialInstructions}:</span> {m.special_instructions}</p>}
                         {m.source_text && (
                           <blockquote className="rounded-2xl border-l-2 border-peach bg-black/30 p-3">
                             <Label className="text-peach">{t.fromYourPaper}</Label>

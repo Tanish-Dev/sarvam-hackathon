@@ -88,7 +88,7 @@ export default function Checklist() {
               return (
                 <li key={k} className="flex items-center gap-3">
                   <TickBox checked={!!ticks[k]} onChange={(v) => setTick(k, v)} label={task} />
-                  <span className={`text-[1rem] ${ticks[k] ? "text-ink/40 line-through" : ""}`}>{task}</span>
+                  <span className={`text-[0.9rem] ${ticks[k] ? "text-ink/40 line-through" : ""}`}>{task}</span>
                 </li>
               );
             })}
@@ -101,7 +101,7 @@ export default function Checklist() {
             if (!meds.length) return null;
             return (
               <div key={s} className="mt-3">
-                <div className="text-[0.9rem] font-medium">{t[s]}</div>
+                <div className="text-[0.9rem] font-normal">{t[s]}</div>
                 <ul className="mt-2 space-y-2">
                   {meds.map(({ m, i }) => {
                     const k = `d${sel}:${s}:${i}`;

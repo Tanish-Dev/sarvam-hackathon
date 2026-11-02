@@ -1,8 +1,8 @@
 "use client";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Camera, FileText, Plus, Sparkles, Upload, X } from "lucide-react";
+import { ArrowLeft, Camera, ExternalLink, FileText, Plus, ScanLine, Sparkles, Upload, X } from "lucide-react";
 import { usePlan } from "@/components/PlanProvider";
 import { Label, LanguagePill, Shell } from "@/components/ui";
 import { fill } from "@/lib/i18n";
@@ -31,6 +31,15 @@ export default function Scan() {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const loadSample = useCallback(async () => {
+    const blob = await fetch("/sample-prescription.jpg").then((r) => r.blob());
+    setFiles([new File([blob], "sample-discharge-summary.jpg", { type: "image/jpeg" })]);
+  }, [setFiles]);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has("sample")) void loadSample();
+  }, [loadSample]);
+
   async function add(list: FileList | null) {
     if (!list?.length) return;
     setBusy(true);
@@ -55,7 +64,7 @@ export default function Scan() {
       </header>
       <div className="px-5 pb-40">
         <h1 className="mt-4 text-[1.5rem] font-light leading-tight tracking-tight">{t.scanTitle}</h1>
-        <div className="mt-4 flex items-start gap-3 rounded-[22px] bg-white p-4 text-[0.9rem] text-ink/75 shadow-sm">
+        <div className="mt-4 flex items-start gap-3 rounded-[22px] bg-white/60 p-4 text-[0.82rem] text-ink/70 ring-1 ring-white/80 backdrop-blur-xl">
           <Sparkles className="mt-0.5 size-5 shrink-0 text-teal" aria-hidden /> {t.scanTip}
         </div>
 
@@ -64,9 +73,9 @@ export default function Scan() {
 
         {files.length === 0 ? (
           <button onClick={() => cam.current?.click()}
-            className="mt-6 flex aspect-[3/4] w-full flex-col items-center justify-center gap-4 rounded-[28px] border-2 border-dashed border-ink/15 bg-white/60 text-ink/70 transition active:scale-[0.99]">
+            className="mt-6 flex aspect-[3/4] w-full flex-col items-center justify-center gap-4 rounded-[28px] border border-dashed border-ink/20 bg-white/50 backdrop-blur-xl text-ink/70 transition active:scale-[0.99]">
             <span className="grid size-20 place-items-center rounded-full bg-night text-white"><Camera className="size-8" /></span>
-            <span className="text-[1.1rem] font-medium text-ink">{t.takePhoto}</span>
+            <span className="text-[0.95rem] text-ink">{t.takePhoto}</span>
           </button>
         ) : (
           <>
@@ -92,15 +101,25 @@ export default function Scan() {
             </div>
           </>
         )}
-        <button onClick={() => pick.current?.click()} className="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-white text-ink ring-1 ring-ink/10">
+        <button onClick={() => pick.current?.click()} className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white/60 text-[0.85rem] text-ink ring-1 ring-white/80 backdrop-blur-xl">
           <Upload className="size-5" /> {t.uploadFile}
         </button>
+        {files.length === 0 && (
+          <div className="mt-6 rounded-[24px] bg-white/60 p-4 ring-1 ring-white/80 backdrop-blur-xl">
+            <p className="text-[0.85rem] text-ink">{t.noPaper}</p>
+            <p className="mt-1 text-[0.78rem] text-ink/55">{t.testingBody}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button onClick={() => void loadSample()} className="inline-flex h-10 items-center gap-1.5 rounded-full bg-night px-4 text-[0.8rem] text-white"><ScanLine className="size-4" /> {t.useSamplePhoto}</button>
+              <a href="/sample-paper" target="_blank" rel="noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-[0.8rem] text-ink/70 ring-1 ring-ink/10"><ExternalLink className="size-3.5" /> {t.viewSamplePaper}</a>
+            </div>
+          </div>
+        )}
         {msg && <p role="alert" className="mt-3 text-center text-[0.9rem] text-alert">{msg}</p>}
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[440px] bg-gradient-to-t from-paper via-paper to-transparent px-5 pt-8 pb-[max(env(safe-area-inset-bottom),18px)]">
         <button disabled={!files.length || busy} onClick={() => router.push("/reading")}
-          className="h-16 w-full rounded-full bg-night text-[1.05rem] font-medium text-white shadow-xl transition disabled:opacity-35 active:scale-[0.98]">
+          className="h-14 w-full rounded-full bg-night text-[0.95rem] font-light text-white shadow-xl transition disabled:opacity-35 active:scale-[0.98]">
           {t.explainPaper}
         </button>
       </div>

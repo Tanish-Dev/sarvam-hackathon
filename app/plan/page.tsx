@@ -6,6 +6,8 @@ import { AlertTriangle, BookOpen, CalendarPlus, ChevronRight, Footprints, HelpCi
 import { useRequirePlan } from "@/components/useRequirePlan";
 import { Card, Disclaimer, Label, ListenButton, MicFab, Shell, TickBox, TopBar } from "@/components/ui";
 import { speak, unlockAudio } from "@/lib/audio";
+import { load, save } from "@/lib/storage";
+import { Lightbulb } from "lucide-react";
 import { fill } from "@/lib/i18n";
 import { buildIcs, downloadIcs } from "@/lib/ics";
 import { daysUntil, greetingText, medScript, nextFollowUp, recoveryDay, SLOTS, shareText, timesText, validIso } from "@/lib/planUtils";
@@ -17,6 +19,8 @@ export default function PlanPage() {
   const [needTap, setNeedTap] = useState(false);
   const [copied, setCopied] = useState(false);
   const [sure, setSure] = useState(false);
+  const [tip, setTip] = useState(false);
+  useEffect(() => { if (!load("tipSeen", false)) setTip(true); }, []);
 
   const greeting = plan ? greetingText(plan, t) : "";
 
@@ -77,6 +81,16 @@ export default function PlanPage() {
         </div>
 
         <div className="space-y-4 px-4 pt-5">
+          {tip && (
+            <div className="flex items-start gap-3 rounded-[24px] bg-white/60 p-4 ring-1 ring-white/80 backdrop-blur-xl">
+              <Lightbulb className="mt-0.5 size-4 shrink-0 text-[#B5651D]" aria-hidden />
+              <div className="flex-1">
+                <p className="text-[0.88rem]">{t.tipTitle}</p>
+                <p className="mt-1 text-[0.78rem] leading-relaxed text-ink/60">{t.tipBody}</p>
+              </div>
+              <button onClick={() => { setTip(false); save("tipSeen", true); }} className="h-9 shrink-0 rounded-full px-3 text-[0.75rem] text-ink/70 ring-1 ring-ink/10">{t.gotIt}</button>
+            </div>
+          )}
           {/* Today */}
           <Card>
             <div className="flex items-center justify-between">
@@ -89,7 +103,7 @@ export default function PlanPage() {
                 if (!meds.length) return null;
                 return (
                   <div key={slot} className="py-3">
-                    <div className="text-[0.95rem] font-medium">{t[slot]}</div>
+                    <div className="text-[0.95rem] font-normal">{t[slot]}</div>
                     <ul className="mt-2 space-y-2">
                       {meds.map(({ m, i }) => {
                         const key = `d${day}:${slot}:${i}`;
@@ -130,7 +144,7 @@ export default function PlanPage() {
                 <ListenButton id="follow" text={`${t.followUp}: ${follow.what}. ${follow.relative_text}. ${follow.where}`} dark />
                 {validIso(follow.date_iso) && (
                   <button onClick={() => downloadIcs("samjho-checkup.ics", buildIcs({ title: follow.what || t.followUp, dateIso: follow.date_iso, location: follow.where, description: follow.source_text }))}
-                    className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-4 text-[0.85rem] font-medium text-ink">
+                    className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-4 text-[0.85rem] font-normal text-ink">
                     <CalendarPlus className="size-4" /> {t.addToCalendar}
                   </button>
                 )}
@@ -148,18 +162,18 @@ export default function PlanPage() {
             <Card className="ring-2 ring-alert/70">
               <div className="flex items-center gap-2 text-alert">
                 <AlertTriangle className="size-5" aria-hidden />
-                <h2 className="text-[1.05rem] font-semibold">{t.warningSigns}</h2>
+                <h2 className="text-[0.95rem] font-normal">{t.warningSigns}</h2>
               </div>
               <ul className="mt-3 space-y-3">
                 {plan.warning_signs.map((w, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="mt-2 size-2 shrink-0 rounded-full bg-alert" aria-hidden />
-                    <div><div className="text-[0.98rem] font-medium">{w.sign_simple}</div><div className="text-[0.85rem] text-ink/65">{w.action}</div></div>
+                    <div><div className="text-[0.9rem]">{w.sign_simple}</div><div className="text-[0.85rem] text-ink/65">{w.action}</div></div>
                   </li>
                 ))}
               </ul>
               <div className="mt-4 flex flex-wrap gap-2">
-                <a href="tel:108" className="inline-flex h-12 items-center gap-2 rounded-full bg-alert px-5 font-semibold text-white"><Phone className="size-4" /> {t.call108}</a>
+                <a href="tel:108" className="inline-flex h-12 items-center gap-2 rounded-full bg-alert px-5 font-medium text-white"><Phone className="size-4" /> {t.call108}</a>
                 <ListenButton id="warn" text={warnText} big />
               </div>
             </Card>
@@ -168,30 +182,30 @@ export default function PlanPage() {
           {/* About */}
           <Card>
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-[1.05rem] font-medium">{t.aboutIllness}</h2>
+              <h2 className="text-[0.95rem] font-normal">{t.aboutIllness}</h2>
               <ListenButton id="about" text={`${plan.diagnosis_simple} ${plan.what_happened}`} />
             </div>
             <p className="mt-3 text-[1rem] leading-relaxed">{plan.diagnosis_simple}</p>
-            <p className="mt-2 text-[0.92rem] leading-relaxed text-ink/70">{plan.what_happened}</p>
+            <p className="mt-2 text-[0.85rem] leading-relaxed text-ink/65">{plan.what_happened}</p>
           </Card>
 
           {/* Diet & activity */}
           {(plan.diet.length > 0 || plan.activity.length > 0) && (
             <Card>
               <div className="flex items-start justify-between gap-3">
-                <h2 className="text-[1.05rem] font-medium">{t.dietActivity}</h2>
+                <h2 className="text-[0.95rem] font-normal">{t.dietActivity}</h2>
                 <ListenButton id="diet" text={[...plan.diet, ...plan.activity].join(" ")} />
               </div>
               {[{ icon: Salad, label: t.diet, items: plan.diet }, { icon: Footprints, label: t.activity, items: plan.activity }].map(({ icon: Icon, label, items }) => items.length > 0 && (
                 <div key={label} className="mt-4">
                   <Label className="flex items-center gap-1.5 text-ink/55"><Icon className="size-3.5" /> {label}</Label>
-                  <ul className="mt-2 space-y-1.5 text-[0.95rem]">{items.map((x, i) => <li key={i}>• {x}</li>)}</ul>
+                  <ul className="mt-2 space-y-1.5 text-[0.88rem]">{items.map((x, i) => <li key={i}>• {x}</li>)}</ul>
                 </div>
               ))}
               {plan.tests_pending.length > 0 && (
                 <div className="mt-4">
                   <Label className="text-ink/55">{t.testsPending}</Label>
-                  <ul className="mt-2 space-y-1.5 text-[0.95rem]">{plan.tests_pending.map((x, i) => <li key={i}>• {x.name} <span className="text-ink/55">— {x.when}</span></li>)}</ul>
+                  <ul className="mt-2 space-y-1.5 text-[0.88rem]">{plan.tests_pending.map((x, i) => <li key={i}>• {x.name} <span className="text-ink/55">— {x.when}</span></li>)}</ul>
                 </div>
               )}
             </Card>
@@ -201,10 +215,10 @@ export default function PlanPage() {
           {confirm.length > 0 && (
             <Card className="bg-[#FFF7EE]">
               <div className="flex items-start justify-between gap-3">
-                <h2 className="flex items-center gap-2 text-[1.05rem] font-medium"><HelpCircle className="size-5 text-[#B5651D]" /> {t.confirmWithDoctor}</h2>
+                <h2 className="flex items-center gap-2 text-[0.95rem] font-normal"><HelpCircle className="size-5 text-[#B5651D]" /> {t.confirmWithDoctor}</h2>
                 <ListenButton id="confirm" text={confirm.join(" ")} />
               </div>
-              <ul className="mt-3 space-y-2 text-[0.95rem]">{confirm.map((c, i) => <li key={i}>• {c}</li>)}</ul>
+              <ul className="mt-3 space-y-2 text-[0.88rem]">{confirm.map((c, i) => <li key={i}>• {c}</li>)}</ul>
             </Card>
           )}
 
@@ -212,7 +226,7 @@ export default function PlanPage() {
           {plan.glossary.length > 0 && (
             <Card>
               <details>
-                <summary className="flex cursor-pointer list-none items-center justify-between text-[1.05rem] font-medium">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-[1.05rem] font-normal">
                   <span className="flex items-center gap-2"><BookOpen className="size-5" /> {t.glossary}</span>
                   <ChevronRight className="size-5 text-ink/40" />
                 </summary>
@@ -230,14 +244,14 @@ export default function PlanPage() {
 
           {/* Share / print / clear */}
           <div className="grid grid-cols-2 gap-3">
-            <button onClick={share} className="flex h-16 items-center justify-center gap-2 rounded-[22px] bg-[#25D366] font-medium text-white"><Share2 className="size-5" /> {t.share}</button>
-            <button onClick={() => window.print()} className="flex h-16 items-center justify-center gap-2 rounded-[22px] bg-white text-[0.85rem] font-medium ring-1 ring-ink/10"><Printer className="size-5" /> {t.print}</button>
+            <button onClick={share} className="flex h-16 items-center justify-center gap-2 rounded-[22px] bg-[#25D366] font-normal text-white"><Share2 className="size-5" /> {t.share}</button>
+            <button onClick={() => window.print()} className="flex h-16 items-center justify-center gap-2 rounded-[22px] bg-white text-[0.85rem] font-normal ring-1 ring-ink/10"><Printer className="size-5" /> {t.print}</button>
           </div>
           {copied && <p role="status" className="text-center text-[0.9rem] text-sage">{t.copied}</p>}
           <div className="flex flex-col items-center gap-1 pt-2">
             <button onClick={() => router.push("/scan")} className="h-12 text-[0.9rem] text-ink/70 underline underline-offset-4">{t.scanAgain}</button>
             <button onClick={() => { if (sure) { clear(); router.replace("/"); } else { setSure(true); setTimeout(() => setSure(false), 4000); } }}
-              className={`flex h-12 items-center gap-2 text-[0.85rem] ${sure ? "font-semibold text-alert" : "text-ink/55"}`}>
+              className={`flex h-12 items-center gap-2 text-[0.85rem] ${sure ? "font-medium text-alert" : "text-ink/55"}`}>
               <Trash2 className="size-4" /> {sure ? t.clearDataSure : t.clearData}
             </button>
           </div>
@@ -248,7 +262,7 @@ export default function PlanPage() {
 
       {/* Printable fridge sheet */}
       <div className="print-only p-6 text-black">
-        <h1 className="text-2xl font-semibold">{plan.patient.name} — {t.medicinesTitle}</h1>
+        <h1 className="text-2xl font-medium">{plan.patient.name} — {t.medicinesTitle}</h1>
         <p className="mt-1 text-sm">{plan.patient.hospital} · {plan.patient.doctor}</p>
         <table className="mt-4 w-full border-collapse text-sm">
           <thead><tr>{["", t.morning, t.afternoon, t.evening, t.night].map((h, i) => <th key={i} className="border border-black p-2 text-left">{h}</th>)}</tr></thead>
