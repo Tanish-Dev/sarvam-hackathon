@@ -18,9 +18,9 @@ export async function POST(req: Request) {
       ],
       schemaName: "discharge_plan",
       schema: planJsonSchema,
-      maxTokens: 16000,
+      maxTokens: 8000,
       reasoning: "none",
-      timeoutMs: 280_000,
+      timeoutMs: 120_000,
     });
     const plan = normalizePlan(raw);
     if (!plan.medicines.length && !plan.diagnosis_simple) {

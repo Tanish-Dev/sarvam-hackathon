@@ -112,8 +112,7 @@ function extractJson(text: string): unknown {
 }
 
 /**
- * Chat completion that returns parsed JSON. Tries strict json_schema first and
- * falls back to json_object (schema in the prompt) if the API rejects the format.
+ * Chat completion that returns parsed JSON (json_object mode, schema given in the prompt).
  */
 export async function chatJson(opts: {
   messages: Msg[];
@@ -138,21 +137,14 @@ export async function chatJson(opts: {
       body: JSON.stringify(body),
     }, opts.timeoutMs).then((r) => r.json() as Promise<{ choices?: { message?: { content?: string } }[] }>);
 
-  let data;
-  try {
-    data = await send({
-      ...base,
-      response_format: { type: "json_schema", json_schema: { name: opts.schemaName, strict: true, schema: opts.schema } },
-    });
-  } catch (e) {
-    if (!(e instanceof SarvamError) || e.status !== 400 && e.status !== 422) throw e;
-    const [sys, ...rest] = opts.messages;
-    data = await send({
-      ...base,
-      messages: [{ role: "system", content: `${sys.content}\n\nReturn ONLY a JSON object matching this JSON schema:\n${JSON.stringify(opts.schema)}` }, ...rest],
-      response_format: { type: "json_object" },
-    });
-  }
+  // Strict json_schema makes sarvam-105b loop (endless whitespace or runaway reasoning) on large
+  // schemas, so use json_object with the schema in the prompt. normalizePlan() validates the result.
+  const [sys, ...rest] = opts.messages;
+  const data = await send({
+    ...base,
+    messages: [{ role: "system", content: `${sys.content}\n\nReturn ONLY one compact JSON object (no markdown, no extra whitespace) matching this JSON schema:\n${JSON.stringify(opts.schema)}` }, ...rest],
+    response_format: { type: "json_object" },
+  });
   const content = data.choices?.[0]?.message?.content ?? "";
   if (!content) throw new SarvamError(502, "Empty model response", "We couldn't get an answer. Please try again.");
   return extractJson(content);

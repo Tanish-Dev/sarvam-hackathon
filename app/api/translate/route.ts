@@ -16,7 +16,7 @@ async function batch(strings: string[], lang: string): Promise<string[]> {
       { role: "system", content: translateSystem(lang) + "\n- Keep any {placeholder} in curly braces exactly unchanged." },
       { role: "user", content: JSON.stringify({ t: strings }) },
     ],
-    schemaName: "translation", schema, maxTokens: 12000, reasoning: "low", temperature: 0.1,
+    schemaName: "translation", schema, maxTokens: 8000, reasoning: "none", temperature: 0.1,
   })) as { t?: unknown };
   const t = Array.isArray(out.t) ? out.t : [];
   return strings.map((s, i) => (typeof t[i] === "string" && t[i] ? (t[i] as string) : s));
