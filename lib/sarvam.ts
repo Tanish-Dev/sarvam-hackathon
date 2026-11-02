@@ -1,5 +1,6 @@
 import "server-only";
 import { SarvamAIClient } from "sarvamai";
+import JSZip from "jszip";
 
 const BASE = "https://api.sarvam.ai";
 
@@ -68,15 +69,18 @@ export async function parseStatus(jobId: string) {
 }
 
 export async function parseMarkdown(jobId: string) {
-  // Jobs may produce HTML only ("job produced html, cannot serve md"), so ask for HTML and flatten it.
-  const res = await sdk(() => client().docAi.getResults(jobId, { format: "html" }, { timeoutInSeconds: 40 }));
-  const docs = ((res as { documents?: { pages?: { page_number?: number; content?: string }[] }[] }).documents) ?? [];
-  return docs
-    .flatMap((d) => d.pages ?? [])
-    .sort((a, b) => (a.page_number ?? 0) - (b.page_number ?? 0))
-    .map((p) => htmlToText(p.content ?? ""))
-    .join("\n\n")
-    .trim();
+  // Results arrive as a ZIP of per-page HTML files.
+  const res = await call(`/doc-ai/v1/job/${encodeURIComponent(jobId)}/results?format=html`, { method: "GET" }, 40_000);
+  const buf = await res.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  if (bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
+    const data = JSON.parse(new TextDecoder().decode(bytes)) as { documents?: { pages?: { content?: string }[] }[] };
+    return (data.documents ?? []).flatMap((d) => d.pages ?? []).map((p) => htmlToText(p.content ?? "")).join("\n\n").trim();
+  }
+  const zip = await JSZip.loadAsync(buf);
+  const names = Object.keys(zip.files).filter((n) => /\.(html?|md|txt)$/i.test(n)).sort();
+  const parts = await Promise.all(names.map((n) => zip.files[n].async("string")));
+  return parts.map((p, i) => (/\.html?$/i.test(names[i]) ? htmlToText(p) : p)).join("\n\n").trim();
 }
 
 function htmlToText(html: string) {
