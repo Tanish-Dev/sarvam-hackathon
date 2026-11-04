@@ -1,18 +1,16 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, ChevronDown, Moon, Sun, Sunrise, Sunset, Utensils } from "lucide-react";
-import { useRequirePlan } from "@/components/useRequirePlan";
-import { Disclaimer, Label, ListenButton, MicFab, Shell, TopBar } from "@/components/ui";
+import { ChevronDown, ExclamationmarkBubble, MoonStars, Sunrise, SunMax, Sunset } from "@/components/icons";
+import { useActivePlan } from "@/components/useActivePlan";
+import { Disclaimer, Label, ListenButton, Shell, TopBar } from "@/components/ui";
 import { fill } from "@/lib/i18n";
 import { foodText, medScript, SLOTS, timesText } from "@/lib/planUtils";
 
-const ICONS = { morning: Sunrise, afternoon: Sun, evening: Sunset, night: Moon };
+const ICONS = { morning: Sunrise, afternoon: SunMax, evening: Sunset, night: MoonStars };
 
 export default function Medicines() {
-  const { plan, t } = useRequirePlan();
-  const router = useRouter();
+  const { plan, t } = useActivePlan();
   const [open, setOpen] = useState<number | null>(null);
   if (!plan) return <Shell className="bg-night" />;
 
@@ -40,7 +38,7 @@ export default function Medicines() {
                     <div className="mt-1 text-[0.95rem] text-white/70">{m.purpose_simple}</div>
                     {m.confidence === "low" && (
                       <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#B5651D]/25 px-2.5 py-1 text-[0.75rem] text-[#F6C28B]">
-                        <AlertTriangle className="size-3.5" /> {t.confirmChip}
+                        <ExclamationmarkBubble className="size-3.5" /> {t.confirmChip}
                       </span>
                     )}
                   </div>
@@ -65,7 +63,7 @@ export default function Medicines() {
                         {m.schedule.sos && <p className="text-[0.9rem] text-peach">{t.whenNeeded}</p>}
                         <dl className="grid grid-cols-2 gap-3 text-[0.9rem]">
                           <div><dt><Label className="text-white/50">{t.dose}</Label></dt><dd className="mt-1">{m.dose}</dd></div>
-                          <div><dt><Label className="text-white/50">{t.food}</Label></dt><dd className="mt-1 flex items-center gap-1.5"><Utensils className="size-4" />{foodText(m, t) || t.anyTime}</dd></div>
+                          <div><dt><Label className="text-white/50">{t.food}</Label></dt><dd className="mt-1 flex items-center gap-1.5">{foodText(m, t) || t.anyTime}</dd></div>
                           <div className="col-span-2"><dt><Label className="text-white/50">{t.timing}</Label></dt>
                             <dd className="mt-1">{m.duration_days ? fill(t.daysLeft, { n: m.duration_days }) : t.continueUntil}</dd></div>
                         </dl>
@@ -87,7 +85,6 @@ export default function Medicines() {
         </ul>
       </div>
       <Disclaimer dark />
-      <MicFab dark onClick={() => router.push("/ask")} label={t.askAnything} />
     </Shell>
   );
 }

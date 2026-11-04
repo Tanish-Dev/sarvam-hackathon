@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useRequirePlan } from "@/components/useRequirePlan";
-import { Card, Disclaimer, Label, ListenButton, MicFab, Shell, TickBox, TopBar } from "@/components/ui";
+import { useActivePlan } from "@/components/useActivePlan";
+import { Card, Disclaimer, Label, ListenButton, Shell, TickBox, TopBar } from "@/components/ui";
 import { SlideToConfirm } from "@/components/SlideToConfirm";
 import { fill } from "@/lib/i18n";
 import { currentSlot, recoveryDay, SLOTS } from "@/lib/planUtils";
@@ -15,13 +14,13 @@ function dayKeys(plan: DischargePlan, d: number) {
 }
 
 export default function Checklist() {
-  const { plan, t, ticks, setTick, setTicks, createdAt } = useRequirePlan();
-  const router = useRouter();
+  const { plan, t, ticks, setTick, setTicks, createdAt } = useActivePlan();
   const today = plan ? recoveryDay(plan, createdAt) : 1;
   const [day, setDay] = useState<number | null>(null);
   if (!plan) return <Shell className="bg-night" />;
 
-  const sel = day ?? today;
+  // The checklist covers the first week; after that it opens on day 7.
+  const sel = day ?? Math.min(7, today);
   const tasks = plan.checklist_7_days.find((x) => x.day === sel)?.tasks ?? [];
   const keys = dayKeys(plan, sel);
   const done = keys.filter((k) => ticks[k]).length;
@@ -119,7 +118,6 @@ export default function Checklist() {
         </Card>
       </div>
       <Disclaimer />
-      <MicFab onClick={() => router.push("/ask")} label={t.askAnything} />
     </Shell>
   );
 }

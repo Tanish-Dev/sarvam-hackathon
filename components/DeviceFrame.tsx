@@ -22,6 +22,7 @@ export function DeviceFrame({ children }: { children: React.ReactNode }) {
         <div className="device">
           <div className="device-screen">
             <div className="device-scroll">{children}</div>
+            <div id="overlay-root" />
             <div className="device-status" aria-hidden>
               <span>9:41</span>
               <span className="flex items-center gap-1.5">

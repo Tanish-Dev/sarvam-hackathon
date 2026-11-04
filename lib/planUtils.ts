@@ -13,11 +13,11 @@ export function daysUntil(iso: string) {
   return Math.round((isoUtc(iso) - todayUtc()) / DAY_MS);
 }
 
-/** Recovery day 1..7, where day 1 is the first day after discharge. */
+/** Recovery day (1, 2, …), where day 1 is the first day after discharge. */
 export function recoveryDay(plan: DischargePlan, createdAt: number) {
   const start = validIso(plan.patient.discharged_on) ? isoUtc(plan.patient.discharged_on) : createdAt - DAY_MS;
   const d = Math.round((todayUtc() - start) / DAY_MS);
-  return Math.min(7, Math.max(1, d));
+  return Math.max(1, d);
 }
 
 export const regularMeds = (p: DischargePlan) => p.medicines.filter((m) => SLOTS.some((s) => m.schedule[s]));

@@ -2,13 +2,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Check, Loader2 } from "lucide-react";
+import { Checkmark } from "@/components/icons";
 import { usePlan } from "@/components/PlanProvider";
-import { Label, Shell } from "@/components/ui";
+import { Shell, Spinner, useGoBack } from "@/components/ui";
 import type { DischargePlan } from "@/lib/schema";
-import { SAMPLE_PLANS } from "@/lib/sample";
 
 type Step = 0 | 1 | 2 | 3;
+
+// The upload's job id survives a reload, so the user can pick up where they left off.
+const JOB_KEY = "samjho:scanJob";
+const job = {
+  get: () => { try { return sessionStorage.getItem(JOB_KEY); } catch { return null; } },
+  set: (id: string) => { try { sessionStorage.setItem(JOB_KEY, id); } catch { /* resume unavailable */ } },
+  clear: () => { try { sessionStorage.removeItem(JOB_KEY); } catch { /* nothing to clear */ } },
+};
 
 async function json<T>(r: Response): Promise<T> {
   const d = (await r.json().catch(() => ({ error: "Something went wrong. Please try again." }))) as T & { error?: string };
@@ -16,54 +23,69 @@ async function json<T>(r: Response): Promise<T> {
   return d;
 }
 
-export default function Reading() {
-  const { t, files, setPlan, lang, ensureTranslated } = usePlan();
+export default function Processing() {
+  const { t, files, setFiles, addPlan, lang, ensureTranslated, openSample } = usePlan();
   const router = useRouter();
+  // Scan was opened from Home, so finishing pops back to it instead of stacking another Home.
+  const goHome = useGoBack("/home", true);
   const [step, setStep] = useState<Step>(0);
   const [text, setText] = useState("");
   const [error, setError] = useState("");
   const [attempt, setAttempt] = useState(0);
   const started = useRef(-1);
+  const run = useRef(0);
+  const alive = useRef(true);
+
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
 
   useEffect(() => {
     if (started.current === attempt) return;
     started.current = attempt;
-    if (!files.length) { router.replace("/scan"); return; }
-    let cancelled = false;
+    const saved = job.get();
+    if (!files.length && !saved) { router.replace("/scan"); return; }
+    const my = ++run.current;
+    const live = () => alive.current && run.current === my;
     (async () => {
       try {
         setError(""); setStep(0); setText("");
-        const fd = new FormData();
-        files.forEach((f) => fd.append("file", f));
-        const { jobId } = await json<{ jobId: string }>(await fetch("/api/scan", { method: "POST", body: fd }));
+        let jobId = saved;
+        if (files.length) {
+          const fd = new FormData();
+          files.forEach((f) => fd.append("file", f));
+          jobId = (await json<{ jobId: string }>(await fetch("/api/scan", { method: "POST", body: fd }))).jobId;
+          job.set(jobId);
+        }
         let markdown = "";
-        for (let i = 0; i < 60 && !cancelled; i++) {
+        for (let i = 0; i < 60 && live(); i++) {
           await new Promise((r) => setTimeout(r, 3000));
           const s = await json<{ status: string; markdown?: string }>(await fetch(`/api/scan/${jobId}`));
           if (s.status === "completed") { markdown = s.markdown ?? ""; break; }
         }
-        if (cancelled) return;
+        if (!live()) return;
         if (!markdown.trim()) throw new Error(t.failedTitle);
         setText(markdown);
         setStep(1);
         const { plan } = await json<{ plan: DischargePlan }>(await fetch("/api/decode", {
           method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: markdown }),
         }));
-        if (cancelled) return;
+        if (!live()) return;
         setStep(2);
-        setPlan(plan, false);
-        await ensureTranslated(lang);
+        job.clear();
+        setFiles([]);
+        const id = addPlan(plan, false);
+        await ensureTranslated(id, lang, plan);
+        if (!live()) return;
         setStep(3);
-        setTimeout(() => router.replace("/plan"), 500);
+        setTimeout(goHome, 500);
       } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : String(e));
+        job.clear();
+        if (live()) setError(e instanceof Error ? e.message : String(e));
       }
     })();
-    return () => { cancelled = true; };
-  }, [attempt, files, lang, router, setPlan, ensureTranslated, t.failedTitle]);
+  }, [attempt]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const cancel = () => { run.current++; job.clear(); router.replace("/scan"); };
   const steps = [t.stepRead, t.stepUnderstand, t.stepVoice];
-  const models = ["Sarvam Vision", "Sarvam-105B", "Bulbul"];
 
   return (
     <Shell className="hero-gradient overflow-hidden text-white">
@@ -84,24 +106,24 @@ export default function Reading() {
                   <motion.li key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: done || active ? 1 : 0.45, x: 0 }} transition={{ delay: i * 0.15 }}
                     className="flex items-center gap-4 rounded-[22px] bg-white/10 p-4 ring-1 ring-white/10 backdrop-blur">
                     <span className={`grid size-10 shrink-0 place-items-center rounded-full ${done ? "bg-sage" : "bg-white/15"}`}>
-                      {done ? <Check className="size-5" /> : active ? <Loader2 className="size-5 animate-spin" /> : <span className="font-mono text-sm">{i + 1}</span>}
+                      {done ? <Checkmark className="size-4" /> : active ? <Spinner className="size-5" /> : <span className="font-mono text-sm">{i + 1}</span>}
                     </span>
-                    <div>
-                      <div className="text-[1rem]">{s}</div>
-                      <Label className="mt-0.5 text-white/55">{models[i]}</Label>
-                    </div>
+                    <div className="text-[1rem]">{s}</div>
                   </motion.li>
                 );
               })}
             </ol>
             <p className="mt-8 text-center text-[0.85rem] text-white/70">{t.readingNote}</p>
+            {step < 2 && (
+              <button onClick={cancel} className="mx-auto mt-6 h-11 rounded-full px-6 text-[0.85rem] text-white/80 ring-1 ring-white/25">{t.cancel}</button>
+            )}
           </>
         ) : (
           <div role="alert" className="mx-auto max-w-sm rounded-[28px] bg-white p-6 text-center text-ink">
             <h1 className="text-[1.3rem] font-medium">{t.failedTitle}</h1>
             <p className="mt-2 text-[0.95rem] text-ink/70">{error}</p>
-            <button onClick={() => setAttempt((a) => a + 1)} className="mt-6 h-14 w-full rounded-full bg-night text-white">{t.retry}</button>
-            <button onClick={() => { setPlan(SAMPLE_PLANS["en-IN"]!, true); router.replace("/plan"); }} className="mt-2 h-14 w-full rounded-full ring-1 ring-ink/15">{t.useSample}</button>
+            <button onClick={() => (files.length ? setAttempt((a) => a + 1) : router.replace("/scan"))} className="mt-6 h-14 w-full rounded-full bg-night text-white">{t.retry}</button>
+            <button onClick={() => { openSample(); goHome(); }} className="mt-2 h-14 w-full rounded-full ring-1 ring-ink/15">{t.useSample}</button>
             <button onClick={() => router.replace("/scan")} className="mt-2 h-12 w-full text-[0.9rem] text-ink/60">{t.back}</button>
           </div>
         )}

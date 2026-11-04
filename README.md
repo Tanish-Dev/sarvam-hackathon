@@ -1,6 +1,6 @@
 # Samjho — your discharge paper, explained in your language
 
-**Live app:** https://samjho-ten.vercel.app · **Instant demo:** https://samjho-ten.vercel.app/plan?demo=1 · **Sample paper to photograph:** https://samjho-ten.vercel.app/sample-paper
+**Live app:** https://samjho-ten.vercel.app · **Instant demo:** https://samjho-ten.vercel.app/demo · **Sample paper to photograph:** https://samjho-ten.vercel.app/sample-paper
 
 Built for the Sarvam AI hackathon.
 
@@ -28,7 +28,9 @@ Photograph the paper. Samjho reads it, turns it into a simple recovery plan, **s
 |---|---|---|
 | ![Scan](docs/screenshots/scan.png) | ![How it works](docs/screenshots/how-it-works.png) | ![Sample paper](public/sample-prescription.jpg) |
 
-**Testing without a real prescription:** on the "How to use" screen, tap **Scan the sample paper**. It loads a realistic sample discharge summary and runs the full live Sarvam pipeline.
+**Signing in:** enter any 10-digit Indian mobile number. Demo mode shows the 6-digit code on screen (no SMS is sent); tap **Fill it in**. Set `SESSION_SECRET` in `.env.local` (and on Vercel) to sign sessions with your own secret.
+
+**Testing without a real prescription:** after signing in, tap **Try a sample** on Home for a ready-made plan, or **Scan the sample paper** on the scan screen to run the full live Sarvam pipeline. `/demo` opens the sample plan directly once signed in.
 
 ## Sarvam pipeline
 

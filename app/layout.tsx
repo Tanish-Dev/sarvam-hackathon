@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import {
   Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Sans_Devanagari, Noto_Sans_Gujarati, Noto_Sans_Gurmukhi,
   Noto_Sans_Kannada, Noto_Sans_Malayalam, Noto_Sans_Oriya, Noto_Sans_Tamil, Noto_Sans_Telugu,
 } from "next/font/google";
+import { AppNav } from "@/components/AppNav";
 import { DeviceFrame } from "@/components/DeviceFrame";
+import { NavTracker } from "@/components/NavTracker";
 import { PlanProvider } from "@/components/PlanProvider";
+import { readSession, SESSION_COOKIE } from "@/lib/auth";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -26,12 +30,16 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#0B0F14", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const user = await readSession((await cookies()).get(SESSION_COOKIE)?.value);
   const fonts = [geist, geistMono, deva, beng, gujr, guru, knda, mlym, orya, taml, telu].map((f) => f.variable).join(" ");
   return (
-    <html lang="hi-IN" className={`${fonts} antialiased`}>
+    <html lang="en-IN" className={`${fonts} antialiased`}>
       <body className="min-h-dvh">
-        <PlanProvider><DeviceFrame>{children}</DeviceFrame></PlanProvider>
+        <PlanProvider initialUser={user}>
+          <NavTracker />
+          <DeviceFrame>{children}<AppNav /></DeviceFrame>
+        </PlanProvider>
       </body>
     </html>
   );

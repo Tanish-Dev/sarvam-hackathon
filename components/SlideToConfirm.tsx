@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Checkmark } from "./icons";
 
 export function SlideToConfirm({ label, doneLabel, done, onConfirm }: { label: string; doneLabel: string; done: boolean; onConfirm: () => void }) {
   const track = useRef<HTMLDivElement>(null);
@@ -12,7 +12,7 @@ export function SlideToConfirm({ label, doneLabel, done, onConfirm }: { label: s
   if (done) {
     return (
       <div className="flex h-16 items-center justify-center gap-2 rounded-full bg-sage text-white" role="status">
-        <Check className="size-5" /> {doneLabel}
+        <Checkmark className="size-5" /> {doneLabel}
       </div>
     );
   }

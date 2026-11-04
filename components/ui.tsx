@@ -1,12 +1,25 @@
 "use client";
 import { useSyncExternalStore } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { AlertTriangle, ArrowLeft, Camera, Check, CheckSquare, Home, Info, Languages, Loader2, Pill, Square, Type, Volume2, VolumeX } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { audioStore, speak, stopAudio, unlockAudio } from "@/lib/audio";
 import { LANGS, type LangCode } from "@/lib/langs";
+import { previousPath } from "@/lib/nav";
+import { Checkmark, ChevronLeft, ExclamationmarkCircle, Globe, Speaker2Fill, SpeakerSlashFill, StopFill } from "./icons";
 import { usePlan } from "./PlanProvider";
+
+/**
+ * Back returns to the previous in-app page when there is one; otherwise it replaces this page with
+ * `fallback`, so it never leaves the app or piles up history. `strict` only goes back to `fallback` itself.
+ */
+export function useGoBack(fallback: string, strict = false) {
+  const router = useRouter();
+  return () => {
+    const prev = previousPath();
+    if (prev && (!strict || prev === fallback)) router.back();
+    else router.replace(fallback);
+  };
+}
 
 export const useAudioState = () => useSyncExternalStore(audioStore.subscribe, audioStore.get, audioStore.server);
 
@@ -23,7 +36,7 @@ export function ListenButton({ id, text, label, dark, big }: { id: string; text:
         dark ? "bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10 hover:bg-ink/10"
       }`}
     >
-      {active && a.loading ? <Loader2 className="size-4 animate-spin" aria-hidden /> : active ? <Square className="size-4 fill-current" aria-hidden /> : <Volume2 className="size-4" aria-hidden />}
+      {active && a.loading ? <Spinner className="size-4" /> : active ? <StopFill className="size-3.5" aria-hidden /> : <Speaker2Fill className="size-4" aria-hidden />}
       <span>{label ?? (active ? t.stop : t.listen)}</span>
     </button>
   );
@@ -49,7 +62,7 @@ export function LanguagePill({ dark }: { dark?: boolean }) {
   const { lang, setLang, t } = usePlan();
   return (
     <label className={`relative inline-flex h-9 items-center gap-1 rounded-full px-2.5 text-[0.75rem] ${dark ? "bg-white/10 text-white ring-1 ring-white/15" : "bg-ink/5 text-ink ring-1 ring-ink/10"}`}>
-      <Languages className="size-3.5" aria-hidden />
+      <Globe className="size-3.5" aria-hidden />
       <span className="sr-only">{t.chooseLanguage}</span>
       <select
         value={lang}
@@ -62,27 +75,27 @@ export function LanguagePill({ dark }: { dark?: boolean }) {
   );
 }
 
-export function TopBar({ dark = true, back }: { dark?: boolean; back?: string }) {
-  const router = useRouter();
-  const { t, largeText, setLargeText, muted, setMuted } = usePlan();
-  const btn = `grid size-10 place-items-center rounded-full transition ${dark ? "text-white/80 hover:bg-white/10" : "text-ink/70 hover:bg-ink/5"}`;
+/**
+ * Page header with no background of its own, so it blends into whatever it sits on. It scrolls away with the page.
+ * `back` is the parent screen and shows a back button; `title` is the page name; `left` replaces both.
+ */
+export function TopBar({ dark = true, back, title, left }: { dark?: boolean; back?: string; title?: string; left?: React.ReactNode }) {
+  const goBack = useGoBack(back ?? "/home");
+  const { t, muted, setMuted } = usePlan();
+  const btn = `grid size-10 place-items-center rounded-full transition ${dark ? "text-white/85 hover:bg-white/10" : "text-ink/75 hover:bg-ink/5"}`;
   return (
-    <header className={`sticky top-0 z-30 px-4 pt-[max(var(--safe-top),8px)] pb-2 backdrop-blur-xl ${dark ? "bg-night/60" : "bg-paper/80"}`}>
+    <header className={`relative z-30 px-4 pt-[max(var(--safe-top),8px)] pb-1 ${dark ? "text-white" : "text-ink"}`}>
       <div className="flex h-11 items-center justify-between gap-2">
-        {back ? (
-          <button className={`${btn} -ml-2`} onClick={() => router.push(back)} aria-label={t.back}><ArrowLeft className="size-5" /></button>
-        ) : (
-          <Link href="/" className={`text-[1.15rem] font-light tracking-tight ${dark ? "text-white" : "text-ink"}`}>samjho</Link>
-        )}
+        <div className="flex min-w-0 items-center gap-1">
+          {back && <button className={`${btn} -ml-2`} onClick={goBack} aria-label={t.back}><ChevronLeft className="size-5" /></button>}
+          {title && <h1 className="truncate text-[1.35rem] font-light tracking-tight">{title}</h1>}
+          {left}
+        </div>
         <div className="flex items-center gap-1">
           <LanguagePill dark={dark} />
           <button className={btn} onClick={() => { if (!muted) stopAudio(); setMuted(!muted); }} aria-label={muted ? t.unmute : t.mute}>
-            {muted ? <VolumeX className="size-[18px]" /> : <Volume2 className="size-[18px]" />}
+            {muted ? <SpeakerSlashFill className="size-[18px]" /> : <Speaker2Fill className="size-[18px]" />}
           </button>
-          <button className={`${btn} ${largeText ? (dark ? "bg-white/15" : "bg-ink/10") : ""}`} onClick={() => setLargeText(!largeText)} aria-pressed={largeText} aria-label={t.largeText}>
-            <Type className="size-[18px]" />
-          </button>
-          <Link href="/how-it-works" className={btn} aria-label={t.howItWorks}><Info className="size-[18px]" /></Link>
         </div>
       </div>
     </header>
@@ -93,7 +106,7 @@ export function Disclaimer({ dark }: { dark?: boolean }) {
   const { t } = usePlan();
   return (
     <p className={`mx-auto mt-8 max-w-sm px-6 pb-32 text-center text-[0.78rem] leading-relaxed ${dark ? "text-white/55" : "text-ink/55"}`}>
-      <AlertTriangle className="mr-1 inline size-3.5 -translate-y-px" aria-hidden />{t.disclaimer}
+      <ExclamationmarkCircle className="mr-1 inline size-3.5 -translate-y-px" aria-hidden />{t.disclaimer}
     </p>
   );
 }
@@ -104,62 +117,23 @@ export function TickBox({ checked, onChange, label }: { checked: boolean; onChan
       className={`grid size-7 shrink-0 place-items-center rounded-full ring-1 transition ${checked ? "bg-sage text-white ring-sage" : "bg-white/70 ring-ink/15"}`}>
       {checked && (
         <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 18 }}>
-          <Check className="size-4" strokeWidth={3} />
+          <Checkmark className="size-3.5" />
         </motion.span>
       )}
     </button>
   );
 }
 
-/** Bottom tab bar: Plan · Medicines · [Ask] · Checklist · Scan. Frosted glass; pass `dark` on dark pages. */
-export function MicFab({ onClick, label, dark = false }: { onClick: () => void; label: string; dark?: boolean }) {
-  const path = usePathname();
-  const { t } = usePlan();
-  const tabs = [
-    { href: "/plan", icon: Home, label: t.navPlan },
-    { href: "/medicines", icon: Pill, label: t.navMeds },
-    null,
-    { href: "/checklist", icon: CheckSquare, label: t.navChecklist },
-    { href: "/scan", icon: Camera, label: t.takePhoto },
-  ];
+export function Spinner({ className = "size-5" }: { className?: string }) {
   return (
-    <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(var(--safe-bottom),10px)]">
-      <div className={`flex h-[68px] items-center justify-around rounded-[30px] px-1.5 ${dark ? "glass-dark" : "glass-light"}`}>
-        {tabs.map((tab, i) => {
-          if (!tab) {
-            return (
-              <button key="ask" onClick={onClick} aria-label={label} className="-mt-9 flex flex-col items-center gap-1">
-                <span className={`grid size-[58px] place-items-center rounded-full p-[5px] ${dark ? "glass-dark" : "glass-light"}`}>
-                  <span className="glass-orb grid size-full place-items-center rounded-full text-white transition active:scale-95"><Waveform className="size-6" /></span>
-                </span>
-                <span className={`text-[0.62rem] font-normal ${dark ? "text-white" : "text-ink"}`}>{t.navAsk}</span>
-              </button>
-            );
-          }
-          const on = path === tab.href;
-          const Icon = tab.icon;
-          return (
-            <Link key={i} href={tab.href} aria-current={on ? "page" : undefined}
-              className={`flex min-w-14 flex-col items-center gap-1 rounded-[22px] px-2 py-1.5 transition ${
-                on ? (dark ? "glass-pill-dark text-white" : "glass-pill-light text-ink") : dark ? "text-white/50 hover:text-white/80" : "text-ink/45 hover:text-ink/70"}`}>
-              <Icon className="size-5" strokeWidth={on ? 2 : 1.6} />
-              <span className="max-w-16 truncate text-[0.62rem] font-normal">{tab.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
-
-export function Waveform({ className = "size-5" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M8 9v6M12 6v12M16 9v6" />
+    <svg viewBox="0 0 24 24" className={`animate-spin ${className}`} aria-hidden fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+      <path d="M12 3a9 9 0 1 0 9 9" />
     </svg>
   );
 }
 
 export function Shell({ children, className = "" }: { children?: React.ReactNode; className?: string }) {
-  return <div className={`relative mx-auto min-h-(--app-h) w-full max-w-[440px] overflow-x-clip ${className}`}>{children}</div>;
+  return <div className={`relative mx-auto min-h-(--app-h) w-full max-w-[440px] overflow-x-clip sm:shadow-[0_0_80px_-20px_rgba(0,0,0,0.6)] ${className}`}>{children}</div>;
 }
+
+export const darkBtn = "flex h-14 w-full items-center justify-center gap-2 rounded-full bg-night text-[0.95rem] font-light text-white shadow-[0_20px_50px_-15px_rgba(11,15,20,0.6)] transition active:scale-[0.98] disabled:opacity-40";

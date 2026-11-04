@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Loader2, Phone, Send, Square } from "lucide-react";
-import { useRequirePlan } from "@/components/useRequirePlan";
-import { Label, ListenButton, Shell, TopBar, Waveform } from "@/components/ui";
+import { ArrowUpCircleFill, PhoneFill } from "@/components/icons";
+import { useActivePlan } from "@/components/useActivePlan";
+import { Label, ListenButton, Shell, Spinner, TopBar } from "@/components/ui";
 import { speak, stopAudio, unlockAudio } from "@/lib/audio";
+import { centerAction } from "@/lib/centerAction";
 import { sampleAnswer } from "@/lib/sample";
 
 const MAX_SEC = 30;
 
 export default function Ask() {
-  const { plan, base, t, lang, isSample, muted } = useRequirePlan();
+  const { plan, base, t, lang, isSample, muted } = useActivePlan();
   const [phase, setPhase] = useState<"idle" | "rec" | "think">("idle");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -74,6 +75,17 @@ export default function Ask() {
   }
 
   const stop = () => { if (rec.current?.state === "recording") rec.current.stop(); };
+
+  // The navbar's centre button is this page's mic.
+  const press = useRef<() => void>(() => {});
+  useEffect(() => { press.current = phase === "rec" ? stop : () => void start(); });
+  useEffect(() => {
+    centerAction.set({
+      label: phase === "rec" ? t.stopRecording : t.askAnything, recording: phase === "rec", disabled: phase === "think",
+      progress: left / MAX_SEC, onPress: () => press.current(),
+    });
+  }, [phase, left, t]);
+  useEffect(() => () => centerAction.set(null), []);
   const doctor = base ? [base.patient.doctor, base.patient.hospital].filter(Boolean).join(" · ") : "";
   const suggestions = [t.sugg1, t.sugg2, t.sugg3];
 
@@ -82,12 +94,12 @@ export default function Ask() {
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className={`absolute left-1/2 top-1/3 size-[460px] -translate-x-1/2 rounded-full blur-3xl drift ${emergency ? "bg-alert/40" : "bg-teal/40"}`} />
       </div>
-      <TopBar back="/plan" />
-      <div className="relative flex min-h-[calc(var(--app-h)-64px)] flex-col px-6 pb-[max(var(--safe-bottom),18px)]">
+      <TopBar />
+      <div className="relative flex min-h-[calc(var(--app-h)-64px)] flex-col px-6 pb-[calc(max(var(--safe-bottom),10px)+100px)]">
         {emergency && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} role="alert" className="mt-2 rounded-[22px] bg-alert p-4 text-white shadow-xl">
             <p className="font-medium leading-snug">{t.emergency}</p>
-            <a href="tel:108" className="mt-3 flex h-14 items-center justify-center gap-2 rounded-full bg-white text-[0.95rem] font-normal text-alert"><Phone className="size-5" /> {t.call108}</a>
+            <a href="tel:108" className="mt-3 flex h-14 items-center justify-center gap-2 rounded-full bg-white text-[0.95rem] font-normal text-alert"><PhoneFill className="size-5" /> {t.call108}</a>
           </motion.div>
         )}
 
@@ -99,7 +111,7 @@ export default function Ask() {
             </div>
           )}
           {phase === "think" ? (
-            <p className="flex items-center gap-2 text-[1.1rem] text-white/80"><Loader2 className="size-5 animate-spin" /> {t.thinking}</p>
+            <p className="flex items-center gap-2 text-[1.1rem] text-white/80"><Spinner className="size-5" /> {t.thinking}</p>
           ) : answer ? (
             <>
               <motion.p key={answer} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-sm text-balance text-[1.3rem] font-light leading-snug">{answer}</motion.p>
@@ -107,7 +119,10 @@ export default function Ask() {
               {doctor && <Label className="mt-4 text-white/45">{doctor}</Label>}
             </>
           ) : phase === "rec" ? (
-            <p className="text-[1.4rem] font-light">{t.listening}</p>
+            <>
+              <p className="text-[1.4rem] font-light">{t.listening}</p>
+              <Label className="mt-2 text-white/60">{left}s</Label>
+            </>
           ) : (
             <>
               <h1 className="text-[1.5rem] font-light tracking-tight">{t.askTitle}</h1>
@@ -126,27 +141,11 @@ export default function Ask() {
           </div>
         )}
 
-        <div className="flex flex-col items-center">
-          <div className="relative grid size-24 place-items-center">
-            {phase === "rec" && <span className="breathe absolute inset-0 rounded-full bg-white" />}
-            {phase === "rec" && (
-              <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100" aria-hidden>
-                <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="2.5" strokeDasharray={295} strokeDashoffset={295 * (1 - left / MAX_SEC)} strokeLinecap="round" />
-              </svg>
-            )}
-            <button onClick={phase === "rec" ? stop : start} disabled={phase === "think"} aria-label={phase === "rec" ? t.stopRecording : t.askAnything}
-              className="relative grid size-20 place-items-center rounded-full bg-white text-ink shadow-[0_16px_50px_-10px_rgba(0,0,0,0.6)] transition active:scale-95 disabled:opacity-50">
-              {phase === "rec" ? <Square className="size-6 fill-current" /> : <Waveform className="size-8" />}
-            </button>
-          </div>
-          {phase === "rec" && <Label className="mt-2 text-white/70">{left}s · {t.stopRecording}</Label>}
-        </div>
-
-        <form className="mt-5 flex gap-2" onSubmit={(e) => { e.preventDefault(); if (typed.trim()) { unlockAudio(); void ask({ text: typed.trim() }); setTyped(""); } }}>
+        <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (typed.trim()) { unlockAudio(); void ask({ text: typed.trim() }); setTyped(""); } }}>
           <label className="sr-only" htmlFor="q">{t.typeQuestion}</label>
           <input id="q" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder={t.typeQuestion} autoComplete="off"
             className="h-14 min-w-0 flex-1 rounded-full bg-white/95 px-5 text-ink placeholder:text-ink/45 outline-none" />
-          <button type="submit" aria-label={t.send} disabled={!typed.trim() || phase === "think"} className="grid size-14 place-items-center rounded-full bg-white text-ink disabled:opacity-40"><Send className="size-5" /></button>
+          <button type="submit" aria-label={t.send} disabled={!typed.trim() || phase === "think"} className="grid size-14 place-items-center rounded-full bg-white text-ink disabled:opacity-40"><ArrowUpCircleFill className="size-7" /></button>
         </form>
       </div>
     </Shell>

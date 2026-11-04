@@ -27,3 +27,12 @@ export function clearAll() {
     /* nothing to clear */
   }
 }
+
+export function remove(key: string) {
+  try {
+    window.localStorage.removeItem(PREFIX + key);
+  } catch {
+    /* storage unavailable */
+  }
+}
+
