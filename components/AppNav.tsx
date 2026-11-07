@@ -22,7 +22,7 @@ export function AppNav() {
   const center = useSyncExternalStore(centerAction.subscribe, centerAction.get, centerAction.server);
   if (!ready || !user || !PAGES.includes(path)) return null;
 
-  const dark = path === "/medicines" || path === "/ask";
+  const dark = path === "/ask";
   const tab = (href: string, label: string, icon: Icon, iconOn: Icon) => ({ href, label, icon, iconOn });
   const left = active ? [tab("/home", t.navHome, House, HouseFill), tab("/medicines", t.navMeds, Capsule, CapsuleFill)] : [tab("/home", t.navHome, House, HouseFill)];
   const right = active ? [tab("/checklist", t.navChecklist, CheckmarkSquare, CheckmarkSquareFill), tab("/profile", t.navProfile, PersonCropCircle, PersonCropCircleFill)]
@@ -34,10 +34,9 @@ export function AppNav() {
     // Tabs replace each other, so the phone's Back button never walks back through tabs.
     return (
       <Link key={href} href={href} replace aria-current={on ? "page" : undefined}
-        className={`flex min-w-16 flex-col items-center gap-1 rounded-[22px] px-2 py-1.5 transition ${
-          on ? (dark ? "glass-pill-dark text-white" : "glass-pill-light text-ink") : dark ? "text-white/55 hover:text-white/80" : "text-ink/50 hover:text-ink/75"}`}>
+        aria-label={label} className={`grid size-12 place-items-center rounded-full transition ${
+          on ? (dark ? "text-white" : "text-ink") : dark ? "text-white/55 hover:text-white/80" : "text-ink/50 hover:text-ink/75"}`}>
         <Icon className="size-[22px]" aria-hidden />
-        <span className="max-w-16 truncate text-[0.62rem]">{label}</span>
       </Link>
     );
   };
@@ -48,18 +47,17 @@ export function AppNav() {
       <span className="glass-orb relative grid size-full place-items-center rounded-full text-white transition active:scale-95">{icon}</span>
     </span>
   );
-  const centerLabel = (text: string) => <span className={`text-[0.62rem] ${dark ? "text-white" : "text-ink"}`}>{text}</span>;
 
   let centerButton: React.ReactNode;
   if (!active) {
     centerButton = (
-      <Link href="/scan" onClick={unlockAudio} className="-mt-9 flex flex-col items-center gap-1">
-        {orb(<CameraFill className="size-6" aria-hidden />)}{centerLabel(t.navScan)}
+      <Link href="/scan" onClick={unlockAudio} aria-label={t.navScan} className="-mt-7 flex flex-col items-center">
+        {orb(<CameraFill className="size-6" aria-hidden />)}
       </Link>
     );
   } else if (path === "/ask" && center) {
     centerButton = (
-      <button onClick={center.onPress} disabled={center.disabled} aria-label={center.label} className="-mt-9 flex flex-col items-center gap-1 disabled:opacity-50">
+      <button onClick={center.onPress} disabled={center.disabled} aria-label={center.label} className="-mt-7 flex flex-col items-center disabled:opacity-50">
         {orb(center.recording ? <StopFill className="size-5" aria-hidden /> : <MicFill className="size-6" aria-hidden />, center.recording && (
           <>
             <span className="breathe absolute inset-0 rounded-full bg-white" aria-hidden />
@@ -68,20 +66,19 @@ export function AppNav() {
             </svg>
           </>
         ))}
-        {centerLabel(center.recording ? t.stopRecording : t.navAsk)}
       </button>
     );
   } else {
     centerButton = (
-      <Link href="/ask" replace onClick={unlockAudio} aria-current={path === "/ask" ? "page" : undefined} className="-mt-9 flex flex-col items-center gap-1">
-        {orb(<MicFill className="size-6" aria-hidden />)}{centerLabel(t.navAsk)}
+      <Link href="/ask" replace onClick={unlockAudio} aria-current={path === "/ask" ? "page" : undefined} aria-label={t.navAsk} className="-mt-7 flex flex-col items-center">
+        {orb(<MicFill className="size-6" aria-hidden />)}
       </Link>
     );
   }
 
   return (
     <nav aria-label="Main" className="no-print fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[440px] px-3 pb-[max(var(--safe-bottom),10px)]">
-      <div className={`flex h-[68px] items-center justify-around rounded-[30px] px-1.5 ${dark ? "glass-dark" : "glass-light"}`}>
+      <div className={`flex h-[68px] items-center justify-around rounded-full px-3 ${dark ? "glass-dark" : "glass-light"}`}>
         {left.map(renderTab)}
         {centerButton}
         {right.map(renderTab)}

@@ -125,7 +125,7 @@ function Today() {
     }
   }, [plan, muted, lang, greeting, translating]);
 
-  if (!plan) return <Shell className="bg-night" />;
+  if (!plan) return <Shell className="bg-paper" />;
 
   const day = recoveryDay(plan, createdAt);
   const follow = nextFollowUp(plan);

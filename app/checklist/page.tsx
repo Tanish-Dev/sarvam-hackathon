@@ -17,7 +17,7 @@ export default function Checklist() {
   const { plan, t, ticks, setTick, setTicks, createdAt } = useActivePlan();
   const today = plan ? recoveryDay(plan, createdAt) : 1;
   const [day, setDay] = useState<number | null>(null);
-  if (!plan) return <Shell className="bg-night" />;
+  if (!plan) return <Shell className="bg-paper" />;
 
   // The checklist covers the first week; after that it opens on day 7.
   const sel = day ?? Math.min(7, today);
